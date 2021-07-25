@@ -7,3 +7,7 @@ commands:
     description: Wraithaven Sculpt commands.
     usage: /whsculpt
     permission: net.whg.utils.whsculpt
+  warp:
+    description: Warp utilities.
+    usage: /warp
+    permission: net.whg.utils.warp

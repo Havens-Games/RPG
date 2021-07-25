@@ -1,10 +1,9 @@
-package net.whg.utils.commands;
+package net.whg.utils.whsculpt;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import net.whg.utils.exceptions.UnknownArgumentException;
-import net.whg.utils.whsculpt.SculptAction;
 
 public class ColorShuffleAction extends SculptAction {
     @Override

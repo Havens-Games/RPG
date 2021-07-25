@@ -10,8 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import net.whg.utils.commands.ColorShuffleAction;
-import net.whg.utils.commands.RemoveKeepOneAction;
 import net.whg.utils.exceptions.UnknownArgumentException;
 
 public class WHSculptCommand implements CommandExecutor {
