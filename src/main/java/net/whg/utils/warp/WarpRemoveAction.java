@@ -33,7 +33,7 @@ public class WarpRemoveAction extends Subcommand {
             for (var pad : warpPads)
                 warpList.removeWarpPad(pad.getName());
 
-            sender.sendConfirmation("Removed warp point '%s' and corresponding warp pads: %s.", warpPoint,
+            sender.sendConfirmation("Removed warp point '%s' and corresponding warp pads: %s.", warpPoint.getName(),
                     warpPadNames);
         } catch (IOException e) {
             sender.sendError("Failed to save warp list! See console for more information.");

@@ -26,7 +26,7 @@ public class WarpPadRemoveAction extends Subcommand {
 
         try {
             warpList.removeWarpPad(warpPad.getName());
-            sender.sendConfirmation("Removed warp pad '%s'.", warpPad);
+            sender.sendConfirmation("Removed warp pad '%s'.", warpPad.getName());
         } catch (IOException e) {
             sender.sendError("Failed to save warp pad list! See console for more information.");
             e.printStackTrace();

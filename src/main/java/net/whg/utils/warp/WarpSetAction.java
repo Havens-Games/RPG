@@ -28,7 +28,7 @@ public class WarpSetAction extends Subcommand {
 
         try {
             warpList.updateWarpPoint(warpPoint);
-            sender.sendConfirmation("Saved warp point '%s'.", warpPoint);
+            sender.sendConfirmation("Saved warp point '%s'.", warpPoint.getName());
         } catch (IOException e) {
             sender.sendError("Failed to save warp list! See console for more information.");
             e.printStackTrace();

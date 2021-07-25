@@ -77,16 +77,20 @@ public class WarpList {
 
     private void loadList() {
         var savedWarpPoints = config.getConfigurationSection("WarpPoints");
-        for (var warpPoint : savedWarpPoints.getKeys(false))
-            warpPoints.put(warpPoint, new WarpPoint(warpPoint, savedWarpPoints.getLocation(warpPoint)));
+        if (savedWarpPoints != null) {
+            for (var warpPoint : savedWarpPoints.getKeys(false))
+                warpPoints.put(warpPoint, new WarpPoint(warpPoint, savedWarpPoints.getLocation(warpPoint)));
+        }
 
         var savedWarpPads = config.getConfigurationSection("WarpPads");
-        for (var warpPad : savedWarpPads.getKeys(false)) {
-            var savedWarpPad = savedWarpPads.getConfigurationSection(warpPad);
-            var location = savedWarpPads.getLocation("Location");
-            var radius = (float) savedWarpPads.getDouble("Radius");
-            var target = savedWarpPad.getString("Target");
-            warpPads.put(warpPad, new WarpPad(warpPad, location, radius, target));
+        if (savedWarpPads != null) {
+            for (var warpPad : savedWarpPads.getKeys(false)) {
+                var savedWarpPad = savedWarpPads.getConfigurationSection(warpPad);
+                var location = savedWarpPads.getLocation("Location");
+                var radius = (float) savedWarpPads.getDouble("Radius");
+                var target = savedWarpPad.getString("Target");
+                warpPads.put(warpPad, new WarpPad(warpPad, location, radius, target));
+            }
         }
     }
 

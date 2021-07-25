@@ -26,7 +26,7 @@ public class WarpPadListAction extends Subcommand {
             return point + ChatColor.GRAY + " -> " + ChatColor.DARK_AQUA + target;
         }).toArray();
 
-        sender.sendConfirmation("Warp Pads: %s", list);
+        sender.sendConfirmation("Warp Pads: %s", (Object) list);
     }
 
     @Override

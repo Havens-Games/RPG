@@ -18,7 +18,7 @@ public class WarpListAction extends Subcommand {
         var sortedList = new ArrayList<String>();
         sortedList.addAll(warpList.listWarpPoints());
         sortedList.sort((a, b) -> a.compareToIgnoreCase(b));
-        sender.sendConfirmation("Warp Points: %s", sortedList);
+        sender.sendConfirmation("Warp Points: %s", (Object) sortedList.toArray());
     }
 
     @Override
