@@ -5,11 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.exceptions.UnknownArgumentException;
+import net.whg.utils.exceptions.CommandException;
 
 public class RemoveKeepOneAction extends Subcommand {
     @Override
-    public void execute(CommandSender sender, String[] args) throws UnknownArgumentException {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         var world = getWorld(args[0]);
         var x1 = getInteger(args[1]);
         var y1 = getInteger(args[2]);

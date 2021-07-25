@@ -5,51 +5,52 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import net.whg.utils.exceptions.UnknownArgumentException;
+import net.whg.utils.exceptions.CommandException;
+import net.whg.utils.exceptions.NoPermissionsException;
 
 public abstract class Subcommand {
-    protected World getWorld(String arg) throws UnknownArgumentException {
+    protected World getWorld(String arg) throws CommandException {
         var world = Bukkit.getWorld(arg);
         if (world == null)
-            throw new UnknownArgumentException("Cannot find world: " + arg);
+            throw new NoPermissionsException("Cannot find world: " + arg);
 
         return world;
     }
 
-    protected int getInteger(String arg) throws UnknownArgumentException {
+    protected int getInteger(String arg) throws CommandException {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw new UnknownArgumentException("Cannot parse integer: " + arg);
+            throw new NoPermissionsException("Cannot parse integer: " + arg);
         }
     }
 
-    protected Material[] getBlockList(String arg) throws UnknownArgumentException {
+    protected Material[] getBlockList(String arg) throws CommandException {
         var blockNames = arg.split(",");
         if (blockNames.length == 0)
-            throw new UnknownArgumentException("Empty block list!");
+            throw new NoPermissionsException("Empty block list!");
 
         var blocks = new Material[blockNames.length];
         for (var i = 0; i < blockNames.length; i++) {
             blocks[i] = Material.matchMaterial(blockNames[i]);
 
             if (blocks[i] == null)
-                throw new UnknownArgumentException("Unknown block type: " + blockNames[i]);
+                throw new NoPermissionsException("Unknown block type: " + blockNames[i]);
         }
 
         return blocks;
     }
 
-    protected Material getBlock(String arg) throws UnknownArgumentException {
+    protected Material getBlock(String arg) throws CommandException {
         var block = Material.matchMaterial(arg);
 
         if (block == null)
-            throw new UnknownArgumentException("Unknown block type: " + arg);
+            throw new NoPermissionsException("Unknown block type: " + arg);
 
         return block;
     }
 
-    public abstract void execute(CommandSender sender, String[] args) throws UnknownArgumentException;
+    public abstract void execute(CommandSender sender, String[] args) throws CommandException;
 
     public abstract String getUsage();
 

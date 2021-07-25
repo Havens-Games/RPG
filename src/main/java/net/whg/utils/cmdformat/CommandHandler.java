@@ -10,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import net.whg.utils.exceptions.UnknownArgumentException;
+import net.whg.utils.exceptions.CommandException;
 
 public abstract class CommandHandler implements CommandExecutor {
     protected final List<Subcommand> actions = new ArrayList<>();
@@ -21,7 +21,7 @@ public abstract class CommandHandler implements CommandExecutor {
 
         for (int i = 0; i < actions.size(); i++) {
             var action = actions.get(i);
-            lines[i + 1] = String.format("%s/whsculpt %s %s", ChatColor.GOLD, action.getName(), action.getUsage());
+            lines[i + 1] = String.format("%s/%s %s %s", ChatColor.GOLD, getName(), action.getName(), action.getUsage());
         }
 
         sender.sendMessage(lines);
@@ -78,7 +78,7 @@ public abstract class CommandHandler implements CommandExecutor {
         try {
             action.execute(sender, args);
             return true;
-        } catch (UnknownArgumentException e) {
+        } catch (CommandException e) {
             sender.sendMessage(ChatColor.RED + e.getMessage());
             return false;
         }
