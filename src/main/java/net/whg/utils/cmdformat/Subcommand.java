@@ -1,4 +1,4 @@
-package net.whg.utils.whsculpt;
+package net.whg.utils.cmdformat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import net.whg.utils.exceptions.UnknownArgumentException;
 
-public abstract class SculptAction {
+public abstract class Subcommand {
     protected World getWorld(String arg) throws UnknownArgumentException {
         var world = Bukkit.getWorld(arg);
         if (world == null)

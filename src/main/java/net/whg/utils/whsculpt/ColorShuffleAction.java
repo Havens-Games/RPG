@@ -3,9 +3,10 @@ package net.whg.utils.whsculpt;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.UnknownArgumentException;
 
-public class ColorShuffleAction extends SculptAction {
+public class ColorShuffleAction extends Subcommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws UnknownArgumentException {
         var world = getWorld(args[0]);

@@ -6,8 +6,9 @@ commands:
   whsculpt:
     description: Wraithaven Sculpt commands.
     usage: /whsculpt
-    permission: net.whg.utils.whsculpt
   warp:
-    description: Warp utilities.
+    description: Creates and manages warp points.
     usage: /warp
-    permission: net.whg.utils.warp
+  spawn:
+    description: Teleports the player to spawn.
+    usage: /spawn
