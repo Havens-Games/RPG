@@ -6,14 +6,16 @@
   <groupId>net.whg.havensgames</groupId>
   <artifactId>utils</artifactId>
   <version>0.1.0</version>
+  <packaging>jar</packaging>
 
   <name>havensgames-utils</name>
   <url>https://github.com/Havens-Games/Utils</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>16</maven.compiler.source>
+    <maven.compiler.target>16</maven.compiler.target>
+    <java.version>16</java.version>
   </properties>
 
   <repositories>

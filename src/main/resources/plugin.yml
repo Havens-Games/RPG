@@ -1,0 +1,9 @@
+name: HavensGames-Utils
+main: net.whg.utils.UtilsPlugin
+version: 0.1.0
+api-version: 1.17
+commands:
+  whsculpt:
+    description: Wraithaven Sculpt commands.
+    usage: /whsculpt
+    permission: net.whg.utils.whsculpt
