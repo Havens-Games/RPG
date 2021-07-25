@@ -24,27 +24,45 @@ public class CmdPlayer {
         var formatted = new Object[args.length];
 
         for (var i = 0; i < formatted.length; i++) {
+            if (args[i]instanceof Object[] arr) {
+                formatted[i] = formatArray(arr, ChatColor.GRAY, ChatColor.DARK_AQUA) + ChatColor.GRAY;
+                continue;
+            }
+
             var variable = args[i].toString();
-
             if (isNumber(variable))
-                formatted[i] = ChatColor.AQUA.toString();
+                formatted[i] = ChatColor.AQUA + variable + ChatColor.GRAY;
             else
-                formatted[i] = ChatColor.DARK_AQUA.toString();
-
-            formatted[i] += variable + ChatColor.GRAY.toString();
+                formatted[i] = ChatColor.DARK_AQUA + variable + ChatColor.GRAY;
         }
 
         message = String.format(message, formatted);
         sender.sendMessage(ChatColor.GRAY + message);
     }
 
+    private String formatArray(Object[] array, ChatColor seperatorColor, ChatColor objectColor) {
+        var str = objectColor.toString();
+
+        var first = true;
+        for (var elem : array) {
+            if (!first)
+                str += seperatorColor + ", " + objectColor;
+
+            str += elem;
+            first = false;
+        }
+
+        return str;
+    }
+
     public void sendError(String message, Object... args) {
         var formatted = new Object[args.length];
 
         for (var i = 0; i < formatted.length; i++) {
-            var variable = args[i].toString();
-            formatted[i] = ChatColor.GOLD.toString();
-            formatted[i] += variable + ChatColor.RED.toString();
+            if (args[i]instanceof Object[] arr)
+                formatted[i] = formatArray(arr, ChatColor.RED, ChatColor.GOLD) + ChatColor.RED;
+            else
+                formatted[i] = ChatColor.GOLD + args[i].toString() + ChatColor.RED;
         }
 
         message = String.format(message, formatted);
