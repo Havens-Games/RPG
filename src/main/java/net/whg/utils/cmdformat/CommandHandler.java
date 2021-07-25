@@ -10,34 +10,36 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import net.whg.utils.CmdPlayer;
 import net.whg.utils.exceptions.CommandException;
 
 public abstract class CommandHandler implements CommandExecutor {
     protected final List<Subcommand> actions = new ArrayList<>();
 
-    private void listActions(CommandSender sender) {
+    private void listActions(CmdPlayer sender) {
         var lines = new String[actions.size() + 1];
-        lines[0] = "Available Actions:";
+        lines[0] = ChatColor.GRAY + "Available Actions:";
 
         for (int i = 0; i < actions.size(); i++) {
             var action = actions.get(i);
-            lines[i + 1] = String.format("%s/%s %s %s", ChatColor.GOLD, getName(), action.getName(), action.getUsage());
+            lines[i + 1] = String.format("%s/%s %s%s %s", ChatColor.DARK_AQUA, getName(), ChatColor.GRAY,
+                    action.getName(), action.getUsage());
         }
 
         sender.sendMessage(lines);
     }
 
-    private Subcommand getTargetAction(CommandSender sender, String name) {
+    private Subcommand getTargetAction(CmdPlayer sender, String name) {
         for (var action : actions) {
             if (action.getName().equalsIgnoreCase(name))
                 return action;
         }
 
-        sender.sendMessage(ChatColor.RED + "Unknown subcommand: " + name);
+        sender.sendError("Unknown subcommand: '%s'", name);
         return null;
     }
 
-    private boolean verifyArgs(CommandSender sender, String usage, String[] args) {
+    private boolean verifyArgs(CmdPlayer sender, String usage, String[] args) {
         var expected = usage.split(" ");
 
         var min = 0;
@@ -60,26 +62,27 @@ public abstract class CommandHandler implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String cmdLabel,
             @NotNull String[] args) {
 
+        var cmdPlayer = new CmdPlayer(sender);
         if (args.length == 0) {
-            listActions(sender);
+            listActions(cmdPlayer);
             return true;
         }
 
         var actionName = args[0];
         args = Arrays.copyOfRange(args, 1, args.length);
 
-        var action = getTargetAction(sender, actionName);
+        var action = getTargetAction(cmdPlayer, actionName);
         if (action == null)
             return false;
 
-        if (!verifyArgs(sender, action.getUsage(), args))
+        if (!verifyArgs(cmdPlayer, action.getUsage(), args))
             return false;
 
         try {
-            action.execute(sender, args);
+            action.execute(cmdPlayer, args);
             return true;
         } catch (CommandException e) {
-            sender.sendMessage(ChatColor.RED + e.getMessage());
+            e.printToPlayer(cmdPlayer);
             return false;
         }
     }

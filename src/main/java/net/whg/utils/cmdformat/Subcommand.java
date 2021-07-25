@@ -3,8 +3,8 @@ package net.whg.utils.cmdformat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 
+import net.whg.utils.CmdPlayer;
 import net.whg.utils.exceptions.CommandException;
 import net.whg.utils.exceptions.NoPermissionsException;
 
@@ -22,6 +22,14 @@ public abstract class Subcommand {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
             throw new NoPermissionsException("Cannot parse integer: " + arg);
+        }
+    }
+
+    protected float getFloat(String arg) throws CommandException {
+        try {
+            return Float.parseFloat(arg);
+        } catch (NumberFormatException e) {
+            throw new NoPermissionsException("Cannot parse float: " + arg);
         }
     }
 
@@ -50,7 +58,7 @@ public abstract class Subcommand {
         return block;
     }
 
-    public abstract void execute(CommandSender sender, String[] args) throws CommandException;
+    public abstract void execute(CmdPlayer sender, String[] args) throws CommandException;
 
     public abstract String getUsage();
 

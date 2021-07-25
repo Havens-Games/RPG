@@ -1,14 +1,12 @@
 package net.whg.utils.whsculpt;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
+import net.whg.utils.CmdPlayer;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.CommandException;
 
 public class ColorShuffleAction extends Subcommand {
     @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {
+    public void execute(CmdPlayer sender, String[] args) throws CommandException {
         var world = getWorld(args[0]);
         var x = getInteger(args[1]);
         var y = getInteger(args[2]);
@@ -31,7 +29,7 @@ public class ColorShuffleAction extends Subcommand {
         }
 
         var placedBlocks = width * length * tileSize * tileSize;
-        sender.sendMessage(ChatColor.GREEN + "Placed " + placedBlocks + " blocks.");
+        sender.sendConfirmation("Placed %s blocks.", placedBlocks);
     }
 
     @Override
