@@ -13,9 +13,19 @@ import org.jetbrains.annotations.NotNull;
 import net.whg.utils.CmdPlayer;
 import net.whg.utils.exceptions.CommandException;
 
+/**
+ * A custom utility handler for managing commands that contain several
+ * subcommands.
+ */
 public abstract class CommandHandler implements CommandExecutor {
     protected final List<Subcommand> actions = new ArrayList<>();
 
+    /**
+     * Sends a list of all available subcommands to the command sender as a
+     * formatted message.
+     * 
+     * @param sender - The command sender to send the message to.
+     */
     private void listActions(CmdPlayer sender) {
         var lines = new String[actions.size() + 1];
         lines[0] = ChatColor.GRAY + "Available Actions:";
@@ -29,6 +39,16 @@ public abstract class CommandHandler implements CommandExecutor {
         sender.sendMessage(lines);
     }
 
+    /**
+     * Gets the subcommand that the command sender is trying to execute. The search
+     * ignores casing. If the command sender requested a subcommand that does not
+     * exist, an error message is sent to the command sender.
+     * 
+     * @param sender - The command sender.
+     * @param name   - The name of the subcommand to look for.
+     * @return The subcommand that was executed, or null if there is no match
+     *         subcommand.
+     */
     private Subcommand getTargetAction(CmdPlayer sender, String name) {
         for (var action : actions) {
             if (action.getName().equalsIgnoreCase(name))
@@ -39,6 +59,21 @@ public abstract class CommandHandler implements CommandExecutor {
         return null;
     }
 
+    /**
+     * Compares the number of arguments that the command sender sent against the
+     * number of required and optional arguments that are requested by the
+     * subcommand. This command only compares the number of arguments, making sure
+     * that the number of provided arguments >= the number of required arguments,
+     * and <= the total number of possible arguments.
+     * 
+     * In the usage string, required arguments are assumed to be surrounded by '<'
+     * and '>'. All other arguments are assumed to be optional.
+     * 
+     * @param sender - The command sender.
+     * @param usage  - The intended usage string.
+     * @param args   - The actual arguments sent by the command sender.
+     * @return True if the argument count is valid. False otherwise.
+     */
     private boolean verifyArgs(CmdPlayer sender, String usage, String[] args) {
         var expected = usage.split(" ");
 
@@ -87,5 +122,10 @@ public abstract class CommandHandler implements CommandExecutor {
         }
     }
 
+    /**
+     * Gets the name of this command.
+     * 
+     * @return The command name.
+     */
     public abstract String getName();
 }

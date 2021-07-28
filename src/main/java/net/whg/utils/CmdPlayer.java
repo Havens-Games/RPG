@@ -5,21 +5,56 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * A simple wrapper for a CommandSender object that adds a few useful functions
+ * that should make writing basic commands much easier and allow uniform
+ * plugin-wide text formatting functionality.
+ */
 public class CmdPlayer {
     private final CommandSender sender;
 
+    /**
+     * Creates a new CmdPlayer.
+     * 
+     * @param sender - The CommandSender object to wrap around.
+     */
     public CmdPlayer(CommandSender sender) {
         this.sender = sender;
     }
 
+    /**
+     * Sends a basic message to the command sender. Does not preform any formatting.
+     * 
+     * @param message - The message string to send.
+     */
     public void sendMessage(String message) {
         sender.sendMessage(message);
     }
 
+    /**
+     * Sends a list of basic messages to the command sender. Each string in the
+     * array appears on a new line. Does not preform any formatting.
+     * 
+     * @param message - The list of messages to send.
+     */
     public void sendMessage(String[] message) {
         sender.sendMessage(message);
     }
 
+    /**
+     * Sends a message to the command sender, but applies a "command confirmation"
+     * message formatting. This will format all colors and arguments to match that
+     * color theme. Message arguments are automatically placed inside of the message
+     * string with proper colors. `%s` should be used within the message string to
+     * determine where to place the message arguments are to be placed.
+     * 
+     * If a message argument is a number, it is formatting as number. If a message
+     * argument is an array, it is formatted as an array. (Note for arrays, array
+     * must be cast to an Object manually due to Java syntax)
+     * 
+     * @param message - The message to send.
+     * @param args    - The message arguments to place within the message.
+     */
     public void sendConfirmation(String message, Object... args) {
         var formatted = new Object[args.length];
 
@@ -29,24 +64,31 @@ public class CmdPlayer {
                 continue;
             }
 
-            var variable = args[i].toString();
-            if (isNumber(variable))
-                formatted[i] = ChatColor.AQUA + variable + ChatColor.GRAY;
+            if (args[i] instanceof Double)
+                formatted[i] = ChatColor.AQUA + args[i].toString() + ChatColor.GRAY;
             else
-                formatted[i] = ChatColor.DARK_AQUA + variable + ChatColor.GRAY;
+                formatted[i] = ChatColor.DARK_AQUA + args[i].toString() + ChatColor.GRAY;
         }
 
         message = String.format(message, formatted);
         sender.sendMessage(ChatColor.GRAY + message);
     }
 
-    private String formatArray(Object[] array, ChatColor seperatorColor, ChatColor objectColor) {
+    /**
+     * Formats an object array into a color-coded object list string.
+     * 
+     * @param array          - The array to format.
+     * @param separatorColor - The color of commas between the list items.
+     * @param objectColor    - The color of the list items themselves.
+     * @return The color-coded list string.
+     */
+    private String formatArray(Object[] array, ChatColor separatorColor, ChatColor objectColor) {
         var str = objectColor.toString();
 
         var first = true;
         for (var elem : array) {
             if (!first)
-                str += seperatorColor + ", " + objectColor;
+                str += separatorColor + ", " + objectColor;
 
             str += elem;
             first = false;
@@ -55,6 +97,19 @@ public class CmdPlayer {
         return str;
     }
 
+    /**
+     * Sends a message to the command sender, but applies a "command error" message
+     * formatting. This will format all colors and arguments to match that color
+     * theme. Message arguments are automatically placed inside of the message
+     * string with proper colors. `%s` should be used within the message string to
+     * determine where to place the message arguments are to be placed.
+     * 
+     * If a message argument is an array, it is formatted as an array. (Note for
+     * arrays, array must be cast to an Object manually due to Java syntax)
+     * 
+     * @param message - The message to send.
+     * @param args    - The message arguments to place within the message.
+     */
     public void sendError(String message, Object... args) {
         var formatted = new Object[args.length];
 
@@ -69,24 +124,34 @@ public class CmdPlayer {
         sender.sendMessage(ChatColor.RED + message);
     }
 
-    private boolean isNumber(String arg) {
-        try {
-            Float.parseFloat(arg);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
+    /**
+     * Checks if the command sender is a player.
+     * 
+     * @return True if the command sender is a player. False otherwise.
+     */
     public boolean isPlayer() {
         return sender instanceof Player;
     }
 
+    /**
+     * Checks if the command sender is a server operator.
+     * 
+     * @return True if the command sender is a server operator. False otherwise.
+     */
     public boolean isOp() {
         return sender.isOp();
     }
 
+    /**
+     * Gets the player that executed this command.
+     * 
+     * @return The player that executed this command, or null if the command sender
+     *         is not a player.
+     */
     public Player getPlayer() {
-        return (Player) sender;
+        if (sender instanceof Player p)
+            return p;
+
+        return null;
     }
 }
