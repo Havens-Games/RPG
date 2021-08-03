@@ -2,9 +2,9 @@ package net.whg.utils.whsculpt;
 
 import org.bukkit.Material;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.CommandException;
+import net.whg.utils.player.CmdPlayer;
 
 public class RemoveKeepOneAction extends Subcommand {
     @Override

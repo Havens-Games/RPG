@@ -1,6 +1,6 @@
 package net.whg.utils.exceptions;
 
-import net.whg.utils.CmdPlayer;
+import net.whg.utils.player.CmdPlayer;
 
 /**
  * Thrown whenever a command could not be properly executed.

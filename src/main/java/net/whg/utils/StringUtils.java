@@ -3,7 +3,7 @@ package net.whg.utils;
 /**
  * A collection of string handling utilities.
  */
-public class StringUtils {
+public final class StringUtils {
     private StringUtils() {
     }
 

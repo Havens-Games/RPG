@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.CommandException;
+import net.whg.utils.player.CmdPlayer;
 
 public class WarpPadListAction extends Subcommand {
     private final WarpList warpList;

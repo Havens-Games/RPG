@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.exceptions.CommandException;
 import net.whg.utils.exceptions.NoPermissionsException;
 import net.whg.utils.exceptions.UnknownArgumentException;
+import net.whg.utils.player.CmdPlayer;
 
 /**
  * A utility handler for managing subcommands. Adds a set of useful protected

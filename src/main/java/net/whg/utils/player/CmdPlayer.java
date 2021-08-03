@@ -1,9 +1,8 @@
-package net.whg.utils;
+package net.whg.utils.player;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * A simple wrapper for a CommandSender object that adds a few useful functions

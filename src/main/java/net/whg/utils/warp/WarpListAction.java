@@ -2,9 +2,9 @@ package net.whg.utils.warp;
 
 import java.util.ArrayList;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.CommandException;
+import net.whg.utils.player.CmdPlayer;
 
 public class WarpListAction extends Subcommand {
     private final WarpList warpList;

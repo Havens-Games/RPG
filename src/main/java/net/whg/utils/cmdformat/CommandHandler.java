@@ -10,8 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.exceptions.CommandException;
+import net.whg.utils.player.CmdPlayer;
 
 /**
  * A custom utility handler for managing commands that contain several

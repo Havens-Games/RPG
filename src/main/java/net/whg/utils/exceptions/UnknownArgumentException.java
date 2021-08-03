@@ -1,6 +1,6 @@
 package net.whg.utils.exceptions;
 
-import net.whg.utils.CmdPlayer;
+import net.whg.utils.player.CmdPlayer;
 
 /**
  * Thrown when the command sender uses an unknown or unparsable command

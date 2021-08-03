@@ -2,11 +2,11 @@ package net.whg.utils.warp;
 
 import java.io.IOException;
 
-import net.whg.utils.CmdPlayer;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.exceptions.CommandException;
 import net.whg.utils.exceptions.NoConsoleException;
 import net.whg.utils.exceptions.NoPermissionsException;
+import net.whg.utils.player.CmdPlayer;
 
 public class WarpSetAction extends Subcommand {
     private final WarpList warpList;
