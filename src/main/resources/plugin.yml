@@ -1,5 +1,5 @@
 name: ${project.artifactId}
-main: net.whg.utils.UtilsPlugin
+main: net.whg.utils.WraithLib
 version: ${project.version}
 api-version: 1.17
 commands:

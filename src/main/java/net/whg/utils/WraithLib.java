@@ -14,7 +14,7 @@ import net.whg.utils.whsculpt.WHSculptCommand;
  * the official server. It should manage a lot of the basic functions that are
  * being used like warps and anti-grief.
  */
-public class UtilsPlugin extends JavaPlugin {
+public class WraithLib extends JavaPlugin {
     @Override
     public void onEnable() {
         var warpList = new WarpList(this);

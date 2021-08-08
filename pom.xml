@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.whg.havensgames</groupId>
-  <artifactId>HavensGames-Utils</artifactId>
+  <artifactId>WraithLib</artifactId>
   <version>0.2.0</version>
   <packaging>jar</packaging>
 
-  <name>havensgames-utils</name>
-  <url>https://github.com/Havens-Games/Utils</url>
+  <name>WraithLib</name>
+  <url>https://github.com/Havens-Games/WraithLib</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
