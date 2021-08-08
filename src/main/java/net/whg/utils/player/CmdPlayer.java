@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
  * A simple wrapper for a CommandSender object that adds a few useful functions
  * that should make writing basic commands much easier and allow uniform
  * plugin-wide text formatting functionality.
+ * 
+ * TODO Remove this class.
  */
 public class CmdPlayer {
     private final CommandSender sender;
