@@ -3,9 +3,6 @@ main: net.whg.utils.WraithLib
 version: ${project.version}
 api-version: 1.17
 commands:
-  whsculpt:
-    description: Wraithaven Sculpt commands.
-    usage: /whsculpt
   warp:
     description: Creates and manages warp points.
     usage: /warp

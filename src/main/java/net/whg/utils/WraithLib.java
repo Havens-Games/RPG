@@ -6,7 +6,6 @@ import net.whg.utils.warp.WarpCommand;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
 import net.whg.utils.warp.WarpPadCommand;
-import net.whg.utils.whsculpt.WHSculptCommand;
 
 /**
  * The Wraithaven Utils plugin is a collection of small utility commands and
@@ -19,7 +18,6 @@ public class WraithLib extends JavaPlugin {
     public void onEnable() {
         var warpList = new WarpList(this);
 
-        getCommand("whsculpt").setExecutor(new WHSculptCommand());
         getCommand("warp").setExecutor(new WarpCommand(warpList));
         getCommand("warppad").setExecutor(new WarpPadCommand(warpList));
 
