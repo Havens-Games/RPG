@@ -1,6 +1,6 @@
-name: HavensGames-Utils
+name: ${project.artifactId}
 main: net.whg.utils.UtilsPlugin
-version: 0.2.0
+version: ${project.version}
 api-version: 1.17
 commands:
   whsculpt:
