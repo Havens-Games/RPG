@@ -85,4 +85,13 @@ public final class Vec3 {
 
         return true;
     }
+
+    /**
+     * Returns a new Vec3f that with the same xyz components as this vector.
+     * 
+     * @return A Vec3f version of this vector.
+     */
+    public Vec3f asVec3f() {
+        return new Vec3f(x, y, z);
+    }
 }
