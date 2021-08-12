@@ -46,6 +46,16 @@ public final class Vec3f {
     }
 
     /**
+     * Multiplies each coordinate in this vector with the given scalar value.
+     * 
+     * @param scalar - The scalar to multiply against.
+     * @return A new vector with the coordinates multiplied.
+     */
+    public Vec3f multiply(float scalar) {
+        return new Vec3f(x * scalar, y * scalar, z * scalar);
+    }
+
+    /**
      * Checks if this vector lies within the given bounds, inclusive.
      * 
      * @param min - The minimum bounds position.
