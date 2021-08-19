@@ -172,7 +172,7 @@ public class Transform {
      * @return The world position.
      */
     public Vec3f getWorldPosition() {
-        return getWorldMatrix().multiplyPosition(pos);
+        return getWorldMatrix().multiplyPosition(Vec3f.ZEROS);
     }
 
     /**
@@ -195,7 +195,7 @@ public class Transform {
      * @return The world scale.
      */
     public Vec3f getWorldScale() {
-        return getWorldMatrix().multiplyDirection(scale);
+        return getWorldMatrix().multiplyDirection(Vec3f.ONES);
     }
 
     /**
