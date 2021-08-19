@@ -236,4 +236,16 @@ public class Mat4f {
                 m30 * other.m02 + m31 * other.m12 + m32 * other.m22 + m33 * other.m32,
                 m30 * other.m03 + m31 * other.m13 + m32 * other.m23 + m33 * other.m33);
     }
+
+    @Override
+    public String toString() {
+        return String.format("[%8.3f|%8.3f|%8.3f|%8.3f]%n" + //
+                "[%8.3f|%8.3f|%8.3f|%8.3f]%n" + //
+                "[%8.3f|%8.3f|%8.3f|%8.3f]%n" + //
+                "[%8.3f|%8.3f|%8.3f|%8.3f]", //
+                m00, m01, m02, m03, //
+                m10, m11, m12, m13, //
+                m20, m21, m22, m23, //
+                m30, m31, m32, m33);
+    }
 }
