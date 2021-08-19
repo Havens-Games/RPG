@@ -3,7 +3,7 @@ package net.whg.utils.math;
 /**
  * An immutable 3D point in space, aligned to a grid.
  */
-public final class Vec3 {
+public class Vec3 {
     public final int x;
     public final int y;
     public final int z;

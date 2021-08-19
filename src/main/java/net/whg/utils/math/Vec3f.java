@@ -4,6 +4,9 @@ package net.whg.utils.math;
  * An immutable 3D point in space.
  */
 public final class Vec3f {
+    public static final Vec3f ZEROS = new Vec3f(0, 0, 0);
+    public static final Vec3f ONES = new Vec3f(1, 1, 1);
+
     public final float x;
     public final float y;
     public final float z;
@@ -74,5 +77,25 @@ public final class Vec3f {
             return false;
 
         return true;
+    }
+
+    /**
+     * Gets the dot product between this vector and another vector.
+     * 
+     * @param other - The other vector.
+     * @return The dot product.
+     */
+    public float dot(Vec3f other) {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
+    /**
+     * Gets the cross product between this vector and another vector.
+     * 
+     * @param other - The other vector.
+     * @return The cross product.
+     */
+    public Vec3f cross(Vec3f other) {
+        return new Vec3f(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
     }
 }
