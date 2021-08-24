@@ -147,6 +147,20 @@ public class Transform {
     }
 
     /**
+     * A utility function for updating the local position and rotation at the same
+     * time. This function will only trigger a single matrix update event as opposed
+     * to updating twice when setting each component individually.
+     * 
+     * @param pos - The new local position.
+     * @param rot - The new local rotation.
+     */
+    public void setLocalPositionAndRotation(Vec3f pos, Quaternion rot) {
+        this.pos = pos;
+        this.rot = rot;
+        updateMatrix();
+    }
+
+    /**
      * Gets the local scale of this transform.
      * 
      * @return The local scale, regardless of the parent.
