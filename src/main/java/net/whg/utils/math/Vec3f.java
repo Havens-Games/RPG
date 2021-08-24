@@ -6,6 +6,8 @@ package net.whg.utils.math;
 public final class Vec3f {
     public static final Vec3f ZEROS = new Vec3f(0, 0, 0);
     public static final Vec3f ONES = new Vec3f(1, 1, 1);
+    public static final Vec3f FORWARD = new Vec3f(0, 0, -1);
+    public static final Vec3f UP = new Vec3f(0, 1, 0);
 
     public final float x;
     public final float y;
@@ -97,5 +99,15 @@ public final class Vec3f {
      */
     public Vec3f cross(Vec3f other) {
         return new Vec3f(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
+    }
+
+    /**
+     * Normalizes this vector.
+     * 
+     * @return A new vector that contains the result.
+     */
+    public Vec3f normalized() {
+        var mag = (float) Math.sqrt(x * x + y * y + z * z);
+        return new Vec3f(x / mag, y / mag, z / mag);
     }
 }
