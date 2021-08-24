@@ -29,6 +29,41 @@ public class Quaternion {
         return new Quaternion(x, y, z, w).normalize();
     }
 
+    /**
+     * Creates a new quaternion from a direction vector.
+     * 
+     * @param forward - The forward direction.
+     * @return A quaternion that looks in the given direction.
+     */
+    public static Quaternion lookDirection(Vec3f forward) {
+        var dot = Vec3f.FORWARD.dot(forward);
+
+        if (Math.abs(dot - (-1.0f)) < 0.000001f) {
+            return new Quaternion(0, 1, 0, (float) Math.PI);
+        }
+        if (Math.abs(dot - (1.0f)) < 0.000001f) {
+            return new Quaternion(0, 0, 0, 1);
+        }
+
+        var rotAngle = (float) Math.acos(dot);
+        var rotAxis = Vec3f.FORWARD.cross(forward).normalized();
+        return fromAxisAngle(rotAxis, (float) Math.toDegrees(rotAngle));
+    }
+
+    /**
+     * Creates a new quaternion from a rotation around a given axis.
+     * 
+     * @param axis  - The axis of rotation.
+     * @param angle - The angle, in degrees, to rotate around the axis.
+     * @return A new quaternion.
+     */
+    public static Quaternion fromAxisAngle(Vec3f axis, float angle) {
+        float sinHalf = (float) Math.sin(Math.toRadians(angle / 2));
+        float cosHalf = (float) Math.cos(Math.toRadians(angle / 2));
+
+        return new Quaternion(axis.x * sinHalf, axis.y * sinHalf, axis.z * sinHalf, cosHalf);
+    }
+
     public final float x;
     public final float y;
     public final float z;
@@ -86,28 +121,23 @@ public class Quaternion {
     }
 
     /**
-     * Gets the yaw value of this Quaternion.
-     * 
-     * @return The yaw, in degrees.
-     */
-    public float getYaw() {
-        double sinyCosp = 2 * (w * z + x * y);
-        double cosyCopy = 1 - 2 * (y * y + z * z);
-        return (float) Math.toDegrees(Math.atan2(sinyCosp, cosyCopy));
-    }
-
-    /**
      * Gets the pitch value of this Quaternion.
      * 
      * @return The pitch, in degrees.
      */
     public float getPitch() {
-        double sinp = 2 * (w * y - z * x);
+        var forward = multiply(Vec3f.FORWARD);
+        return (float) Math.toDegrees(Math.asin(-forward.y));
+    }
 
-        if (Math.abs(sinp) >= 1)
-            return (float) Math.toDegrees(Math.copySign(Math.PI / 2, sinp));
-        else
-            return (float) Math.toDegrees(Math.asin(sinp));
+    /**
+     * Gets the yaw value of this Quaternion.
+     * 
+     * @return The yaw, in degrees.
+     */
+    public float getYaw() {
+        var forward = multiply(Vec3f.FORWARD);
+        return (float) Math.toDegrees(Math.atan2(forward.x, forward.z));
     }
 
     /**
