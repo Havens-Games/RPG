@@ -1,4 +1,4 @@
-package net.whg.utils.player;
+package net.whg.utils.inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
