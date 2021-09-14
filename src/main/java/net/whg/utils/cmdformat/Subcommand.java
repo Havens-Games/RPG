@@ -56,6 +56,25 @@ public abstract class Subcommand {
     }
 
     /**
+     * Parses the given argument as a boolean.
+     * 
+     * @param arg - The argument to parse.
+     * @return The boolean this argument represents.
+     * @throws CommandException If the argument could not be parsed as a boolean.
+     */
+    protected boolean getBoolean(String arg) throws CommandException {
+        var b = arg.toLowerCase();
+
+        if (b.equals("t") || b.equals("y") || b.equals("true") || b.equals("yes"))
+            return true;
+
+        if (b.equals("f") || b.equals("n") || b.equals("false") || b.equals("no"))
+            return false;
+
+        throw new UnknownArgumentException("Cannot parse boolean: %s", arg);
+    }
+
+    /**
      * Parses the given argument as a list of block types.
      * 
      * @param arg - The argument to parse.

@@ -9,6 +9,8 @@ import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
+import net.whg.utils.events.location.CylinderLocationTrigger;
+import net.whg.utils.events.location.LocationTrigger;
 import net.whg.utils.events.location.SphereLocationTrigger;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpPad;
@@ -28,8 +30,17 @@ public class WarpPadSetAction extends Subcommand {
         var location = player.getLocation();
         var radius = getFloat(args[1]);
         var warpPoint = getWarpPoint(args[2]);
+        LocationTrigger locationTrigger = new SphereLocationTrigger(name, location, radius, true);
 
-        var locationTrigger = new SphereLocationTrigger(name, location, radius, true);
+        if (args.length > 3 && getBoolean(args[3])) {
+            var cylHeight = 1;
+
+            if (args.length > 4)
+                cylHeight = getInteger(args[4]);
+
+            locationTrigger = new CylinderLocationTrigger(name, location, radius, cylHeight, true);
+        }
+
         var warpPad = new WarpPad(locationTrigger, warpPoint.name());
 
         try {
@@ -48,7 +59,7 @@ public class WarpPadSetAction extends Subcommand {
 
     @Override
     public String getUsage() {
-        return "<name> <radius> <warp point>";
+        return "<name> <radius> <warp point> [cylinderMode] [cylinderHeight]";
     }
 
     @Override
