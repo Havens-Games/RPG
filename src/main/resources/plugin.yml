@@ -5,10 +5,7 @@ api-version: 1.17
 commands:
   warp:
     description: Creates and manages warp points.
-    usage: /warp
   warppad:
     description: Creates and manages warp pads.
-    usage: /warppad
   spawn:
     description: Teleports the player to spawn.
-    usage: /spawn
