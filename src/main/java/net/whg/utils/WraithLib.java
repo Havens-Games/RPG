@@ -3,11 +3,15 @@ package net.whg.utils;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.whg.utils.cmdformat.CommandHandler;
+import net.whg.utils.events.location.CylinderLocationTrigger;
+import net.whg.utils.events.location.LocationTriggerListener;
+import net.whg.utils.events.location.SphereLocationTrigger;
 import net.whg.utils.logging.LoggingHandler;
 import net.whg.utils.warp.WarpCommand;
 import net.whg.utils.warp.WarpList;
@@ -22,6 +26,14 @@ import net.whg.utils.warp.WarpPadCommand;
  */
 public class WraithLib extends JavaPlugin {
     public static LoggingHandler log = new LoggingHandler(Logger.getLogger(WraithLib.class.toString()));
+
+    /**
+     * Initialize configuration serializable classes.
+     */
+    static {
+        ConfigurationSerialization.registerClass(SphereLocationTrigger.class, "SphereLocationTrigger");
+        ConfigurationSerialization.registerClass(CylinderLocationTrigger.class, "CylinderLocationTrigger");
+    }
 
     /**
      * Sets the logging handler that is assigned to this plugin instance.
@@ -40,9 +52,13 @@ public class WraithLib extends JavaPlugin {
     public void onEnable() {
         setLoggingHandler(new LoggingHandler(getLogger()));
 
+        var locationTriggerListener = new LocationTriggerListener();
         var warpList = new WarpList(this);
+
         loadCommand("warp", new WarpCommand(warpList));
         loadCommand("warppad", new WarpPadCommand(warpList));
+
+        registerEvents(locationTriggerListener);
         registerEvents(new WarpListener(warpList));
     }
 
@@ -57,6 +73,11 @@ public class WraithLib extends JavaPlugin {
         getCommand(commandName).setExecutor(handler);
     }
 
+    /**
+     * Loads an event listener and registers it with Bukkit.
+     * 
+     * @param listener - The event listener to register.
+     */
     private void registerEvents(Listener listener) {
         WraithLib.log.logInfo("Registered event listeners for %s.", listener.getClass().getSimpleName());
         Bukkit.getPluginManager().registerEvents(listener, this);
