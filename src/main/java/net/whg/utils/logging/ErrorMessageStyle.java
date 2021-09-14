@@ -1,4 +1,4 @@
-package net.whg.utils.messaging;
+package net.whg.utils.logging;
 
 import org.bukkit.ChatColor;
 

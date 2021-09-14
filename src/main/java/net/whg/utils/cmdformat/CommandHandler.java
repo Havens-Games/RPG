@@ -8,10 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.player.CmdPlayer;
+import net.whg.utils.WraithLib;
 
 /**
  * A custom utility handler for managing commands that contain several
@@ -26,7 +26,7 @@ public abstract class CommandHandler implements CommandExecutor {
      * 
      * @param sender - The command sender to send the message to.
      */
-    private void listActions(CmdPlayer sender) {
+    private void listActions(CommandSender sender) {
         var lines = new String[actions.size() + 1];
         lines[0] = ChatColor.GRAY + "Available Actions:";
 
@@ -49,13 +49,13 @@ public abstract class CommandHandler implements CommandExecutor {
      * @return The subcommand that was executed, or null if there is no match
      *         subcommand.
      */
-    private Subcommand getTargetAction(CmdPlayer sender, String name) {
+    private Subcommand getTargetAction(CommandSender sender, String name) {
         for (var action : actions) {
             if (action.getName().equalsIgnoreCase(name))
                 return action;
         }
 
-        sender.sendError("Unknown subcommand: '%s'", name);
+        WraithLib.log.sendError(sender, "Unknown subcommand: '%s'", name);
         return null;
     }
 
@@ -74,7 +74,7 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param args   - The actual arguments sent by the command sender.
      * @return True if the argument count is valid. False otherwise.
      */
-    private boolean verifyArgs(CmdPlayer sender, String usage, String[] args) {
+    private boolean verifyArgs(CommandSender sender, String usage, String[] args) {
         var expected = usage.split(" ");
 
         var min = 0;
@@ -96,30 +96,54 @@ public abstract class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String cmdLabel,
             @NotNull String[] args) {
-
-        var cmdPlayer = new CmdPlayer(sender);
         if (args.length == 0) {
-            listActions(cmdPlayer);
+            listActions(sender);
             return true;
         }
 
         var actionName = args[0];
         args = Arrays.copyOfRange(args, 1, args.length);
 
-        var action = getTargetAction(cmdPlayer, actionName);
+        var action = getTargetAction(sender, actionName);
         if (action == null)
-            return false;
+            return true;
 
-        if (!verifyArgs(cmdPlayer, action.getUsage(), args))
-            return false;
+        if (!verifyArgs(sender, action.getUsage(), args))
+            return true;
 
         try {
-            action.execute(cmdPlayer, args);
-            return true;
+            checkSubcommandState(sender, action);
+            action.execute(sender, args);
+        } catch (InternalCommandException e) {
+            e.printToPlayer(sender);
+            e.printStackTrace();
         } catch (CommandException e) {
-            e.printToPlayer(cmdPlayer);
-            return false;
+            e.printToPlayer(sender);
+        } catch (Exception e) {
+            var internal = new InternalCommandException(e);
+            internal.printToPlayer(sender);
+            internal.printStackTrace();
         }
+
+        return true;
+    }
+
+    /**
+     * Checks if the command sender meets the requirements provided by the
+     * subcommand to be executed. Throws a corresponding command exception if the
+     * requirements are not met.
+     * 
+     * @param sender     - The command sender.
+     * @param subcommand - The subcommand to check against.
+     * @throws CommandException If the command sender fails to meet one of the
+     *                          requirements provided by the subcommand.
+     */
+    private void checkSubcommandState(CommandSender sender, Subcommand subcommand) throws CommandException {
+        if (subcommand.requiresOp() && !sender.isOp())
+            throw new NoPermissionsException();
+
+        if (subcommand.requiresNoConsole() && !(sender instanceof Player))
+            throw new NoConsoleException();
     }
 
     /**

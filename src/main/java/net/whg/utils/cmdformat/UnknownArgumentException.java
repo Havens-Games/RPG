@@ -1,6 +1,8 @@
-package net.whg.utils.exceptions;
+package net.whg.utils.cmdformat;
 
-import net.whg.utils.player.CmdPlayer;
+import org.bukkit.command.CommandSender;
+
+import net.whg.utils.WraithLib;
 
 /**
  * Thrown when the command sender uses an unknown or unparsable command
@@ -15,8 +17,8 @@ public class UnknownArgumentException extends CommandException {
     }
 
     @Override
-    public void printToPlayer(CmdPlayer sender) {
-        sender.sendError(getMessage(), argument);
+    public void printToPlayer(CommandSender sender) {
+        WraithLib.log.sendMessage(sender, getMessage(), argument);
     }
 
     @Override

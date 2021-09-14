@@ -19,10 +19,10 @@ public class WarpListener implements Listener {
         if (warpPad == null)
             return;
 
-        var warpPoint = warpList.getWarpPoint(warpPad.getWarpPoint());
+        var warpPoint = warpList.getWarpPoint(warpPad.warpPoint());
         if (warpPoint == null)
             return; // Uhh, corrupted config file?
 
-        player.teleport(warpPoint.getLocation());
+        player.teleport(warpPoint.location());
     }
 }

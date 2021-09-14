@@ -29,8 +29,8 @@ public class WarpList {
     }
 
     public void updateWarpPoint(WarpPoint warpPoint) throws IOException {
-        warpPoints.put(warpPoint.getName(), warpPoint);
-        config.set("WarpPoints." + warpPoint.getName(), warpPoint.getLocation());
+        warpPoints.put(warpPoint.name(), warpPoint);
+        config.set("WarpPoints." + warpPoint.name(), warpPoint.location());
         config.save(configFile);
     }
 
@@ -45,10 +45,10 @@ public class WarpList {
     }
 
     public void updateWarpPad(WarpPad warpPad) throws IOException {
-        warpPads.put(warpPad.getName(), warpPad);
-        config.set(String.format("WarpPads.%s.Location", warpPad.getName()), warpPad.getLocation());
-        config.set(String.format("WarpPads.%s.Radius", warpPad.getName()), warpPad.getRadius());
-        config.set(String.format("WarpPads.%s.Target", warpPad.getName()), warpPad.getWarpPoint());
+        warpPads.put(warpPad.name(), warpPad);
+        config.set(String.format("WarpPads.%s.Location", warpPad.name()), warpPad.location());
+        config.set(String.format("WarpPads.%s.Radius", warpPad.name()), warpPad.radius());
+        config.set(String.format("WarpPads.%s.Target", warpPad.name()), warpPad.warpPoint());
         config.save(configFile);
     }
 
@@ -60,8 +60,8 @@ public class WarpList {
 
     public WarpPad getWarpPadNear(Location location) {
         for (var warpPad : warpPads.values()) {
-            var loc = warpPad.getLocation();
-            var radius = warpPad.getRadius() * warpPad.getRadius();
+            var loc = warpPad.location();
+            var radius = warpPad.radius() * warpPad.radius();
 
             if (loc.getWorld() != location.getWorld())
                 continue;
@@ -105,7 +105,7 @@ public class WarpList {
     public List<WarpPad> getWarpPadsToPoint(String warpPoint) {
         var list = new ArrayList<WarpPad>();
         for (var pad : warpPads.values()) {
-            if (pad.getWarpPoint().equals(warpPoint))
+            if (pad.warpPoint().equals(warpPoint))
                 list.add(pad);
         }
 

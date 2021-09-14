@@ -2,11 +2,12 @@ package net.whg.utils.warp;
 
 import java.io.IOException;
 
+import org.bukkit.command.CommandSender;
+
+import net.whg.utils.WraithLib;
+import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.exceptions.NoPermissionsException;
-import net.whg.utils.exceptions.UnknownArgumentException;
-import net.whg.utils.player.CmdPlayer;
+import net.whg.utils.cmdformat.UnknownArgumentException;
 
 public class WarpPadRemoveAction extends Subcommand {
     private final WarpList warpList;
@@ -16,19 +17,16 @@ public class WarpPadRemoveAction extends Subcommand {
     }
 
     @Override
-    public void execute(CmdPlayer sender, String[] args) throws CommandException {
-        if (!sender.isOp())
-            throw new NoPermissionsException("You do not have permission to remove warp pads!");
-
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         var warpPad = warpList.getWarpPad(args[0]);
         if (warpPad == null)
             throw new UnknownArgumentException("Unknown warp pad: '%s'", args[0]);
 
         try {
-            warpList.removeWarpPad(warpPad.getName());
-            sender.sendConfirmation("Removed warp pad '%s'.", warpPad.getName());
+            warpList.removeWarpPad(warpPad.name());
+            WraithLib.log.sendError(sender, "Removed warp pad '%s'.", warpPad.name());
         } catch (IOException e) {
-            sender.sendError("Failed to save warp pad list! See console for more information.");
+            WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");
             e.printStackTrace();
         }
     }
@@ -41,5 +39,10 @@ public class WarpPadRemoveAction extends Subcommand {
     @Override
     public String getName() {
         return "remove";
+    }
+
+    @Override
+    public boolean requiresOp() {
+        return true;
     }
 }

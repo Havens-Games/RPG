@@ -1,7 +1,13 @@
 package net.whg.utils;
 
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.whg.utils.cmdformat.CommandHandler;
+import net.whg.utils.logging.LoggingHandler;
 import net.whg.utils.warp.WarpCommand;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
@@ -14,14 +20,53 @@ import net.whg.utils.warp.WarpPadCommand;
  * being used like warps and anti-grief.
  */
 public class WraithLib extends JavaPlugin {
+    public static LoggingHandler log = new LoggingHandler(Logger.getLogger(WraithLib.class.toString()));
+
+    /**
+     * Sets the logging handler that is assigned to this plugin instance.
+     * 
+     * @param loggingHandler - The new logging handler.
+     */
+    private static void setLoggingHandler(LoggingHandler loggingHandler) {
+        WraithLib.log = loggingHandler;
+    }
+
+    /**
+     * Called when the plugin is enabled to initialize all managers, handlers, and
+     * load resources.
+     */
     @Override
     public void onEnable() {
+        setLoggingHandler(new LoggingHandler(getLogger()));
+
         var warpList = new WarpList(this);
+        loadCommand("warp", new WarpCommand(warpList));
+        loadCommand("warppad", new WarpPadCommand(warpList));
+        registerEvents(new WarpListener(warpList));
+    }
 
-        getCommand("warp").setExecutor(new WarpCommand(warpList));
-        getCommand("warppad").setExecutor(new WarpPadCommand(warpList));
+    /**
+     * Loads a command by name and registers the command executor.
+     * 
+     * @param commandName - The command name.
+     * @param handler     - The command handler.
+     */
+    private void loadCommand(String commandName, CommandHandler handler) {
+        WraithLib.log.logInfo("Loading %s command.", commandName);
+        getCommand(commandName).setExecutor(handler);
+    }
 
-        var pm = getServer().getPluginManager();
-        pm.registerEvents(new WarpListener(warpList), this);
+    private void registerEvents(Listener listener) {
+        WraithLib.log.logInfo("Registered event listeners for %s.", listener.getClass().getSimpleName());
+        Bukkit.getPluginManager().registerEvents(listener, this);
+    }
+
+    /**
+     * Called when the plugin is disabled to clear all resources.
+     */
+    @Override
+    public void onDisable() {
+        WraithLib.log.logInfo("Disabled WraithLib plugin.");
+        setLoggingHandler(new LoggingHandler(Logger.getLogger(WraithLib.class.toString())));
     }
 }

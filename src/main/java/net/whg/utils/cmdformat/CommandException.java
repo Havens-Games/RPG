@@ -1,6 +1,8 @@
-package net.whg.utils.exceptions;
+package net.whg.utils.cmdformat;
 
-import net.whg.utils.player.CmdPlayer;
+import org.bukkit.command.CommandSender;
+
+import net.whg.utils.WraithLib;
 
 /**
  * Thrown whenever a command could not be properly executed.
@@ -10,7 +12,7 @@ public abstract class CommandException extends Exception {
         super(message);
     }
 
-    public void printToPlayer(CmdPlayer sender) {
-        sender.sendError(getMessage());
+    public void printToPlayer(CommandSender sender) {
+        WraithLib.log.sendMessage(sender, getMessage());
     }
 }

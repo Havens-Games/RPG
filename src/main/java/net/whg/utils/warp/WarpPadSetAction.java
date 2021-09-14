@@ -2,11 +2,13 @@ package net.whg.utils.warp;
 
 import java.io.IOException;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import net.whg.utils.WraithLib;
+import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.exceptions.NoConsoleException;
-import net.whg.utils.exceptions.NoPermissionsException;
-import net.whg.utils.player.CmdPlayer;
+import net.whg.utils.cmdformat.UnknownArgumentException;
 
 public class WarpPadSetAction extends Subcommand {
     private final WarpList warpList;
@@ -16,26 +18,20 @@ public class WarpPadSetAction extends Subcommand {
     }
 
     @Override
-    public void execute(CmdPlayer sender, String[] args) throws CommandException {
-        if (!sender.isPlayer())
-            throw new NoConsoleException("You must be a player to use warp pads!");
-
-        if (!sender.isOp())
-            throw new NoPermissionsException("You do not have permission to create warp pads!");
-
-        var player = sender.getPlayer();
+    public void execute(CommandSender sender, String[] args) throws CommandException {
+        var player = (Player) sender;
         var name = args[0];
         var location = player.getLocation();
         var radius = getFloat(args[1]);
         var warpPoint = getWarpPoint(args[2]);
 
-        var warpPad = new WarpPad(name, location, radius, warpPoint.getName());
+        var warpPad = new WarpPad(name, location, radius, warpPoint.name());
 
         try {
             warpList.updateWarpPad(warpPad);
-            sender.sendConfirmation("Saved warp pad '%s' to '%s'.", name, warpPoint.getName());
+            WraithLib.log.sendMessage(sender, "Saved warp pad '%s' to '%s'.", name, warpPoint.name());
         } catch (IOException e) {
-            sender.sendError("Failed to save warp pad list! See console for more information.");
+            WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");
             e.printStackTrace();
         }
     }
@@ -50,10 +46,20 @@ public class WarpPadSetAction extends Subcommand {
         return "set";
     }
 
+    @Override
+    public boolean requiresOp() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresNoConsole() {
+        return true;
+    }
+
     protected WarpPoint getWarpPoint(String arg) throws CommandException {
         var warpPoint = warpList.getWarpPoint(arg);
         if (warpPoint == null)
-            throw new NoPermissionsException("Cannot find warp point: " + arg);
+            throw new UnknownArgumentException("Cannot find warp point: %s", arg);
 
         return warpPoint;
     }

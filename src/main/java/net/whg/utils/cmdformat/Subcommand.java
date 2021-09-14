@@ -3,11 +3,7 @@ package net.whg.utils.cmdformat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.exceptions.NoPermissionsException;
-import net.whg.utils.exceptions.UnknownArgumentException;
-import net.whg.utils.player.CmdPlayer;
+import org.bukkit.command.CommandSender;
 
 /**
  * A utility handler for managing subcommands. Adds a set of useful protected
@@ -102,6 +98,28 @@ public abstract class Subcommand {
     }
 
     /**
+     * Whether or not this subcommand requires the command sender to be a server
+     * operator or not.
+     * 
+     * @return True if the command sender must be a server operator. False
+     *         otherwise.
+     */
+    public boolean requiresOp() {
+        return false;
+    }
+
+    /**
+     * Whether or not this subcommand requires the command sender to be a player and
+     * not a console.
+     * 
+     * @return True if the command sender must be a player. False if the command
+     *         sender is allowed to be a console.
+     */
+    public boolean requiresNoConsole() {
+        return false;
+    }
+
+    /**
      * Executes this subcommand.
      * 
      * @param sender - The command sender.
@@ -109,7 +127,7 @@ public abstract class Subcommand {
      * @throws CommandException If an exception is thrown while executing this
      *                          command.
      */
-    public abstract void execute(CmdPlayer sender, String[] args) throws CommandException;
+    public abstract void execute(CommandSender sender, String[] args) throws CommandException;
 
     /**
      * Gets the usage string for this subcommand. <br/>

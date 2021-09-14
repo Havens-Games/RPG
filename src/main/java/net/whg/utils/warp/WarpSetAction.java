@@ -2,11 +2,12 @@ package net.whg.utils.warp;
 
 import java.io.IOException;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import net.whg.utils.WraithLib;
+import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.exceptions.NoConsoleException;
-import net.whg.utils.exceptions.NoPermissionsException;
-import net.whg.utils.player.CmdPlayer;
 
 public class WarpSetAction extends Subcommand {
     private final WarpList warpList;
@@ -16,21 +17,15 @@ public class WarpSetAction extends Subcommand {
     }
 
     @Override
-    public void execute(CmdPlayer sender, String[] args) throws CommandException {
-        if (!sender.isPlayer())
-            throw new NoConsoleException("You must be a player to use warp points!");
-
-        if (!sender.isOp())
-            throw new NoPermissionsException("You do not have permission to create warp points!");
-
-        var player = sender.getPlayer();
+    public void execute(CommandSender sender, String[] args) throws CommandException {
+        var player = (Player) sender;
         var warpPoint = new WarpPoint(args[0], player.getLocation());
 
         try {
             warpList.updateWarpPoint(warpPoint);
-            sender.sendConfirmation("Saved warp point '%s'.", warpPoint.getName());
+            WraithLib.log.sendMessage(sender, "Saved warp point '%s'.", warpPoint.name());
         } catch (IOException e) {
-            sender.sendError("Failed to save warp list! See console for more information.");
+            WraithLib.log.sendError(sender, "Failed to save warp list! See console for more information.");
             e.printStackTrace();
         }
     }
@@ -43,5 +38,15 @@ public class WarpSetAction extends Subcommand {
     @Override
     public String getName() {
         return "set";
+    }
+
+    @Override
+    public boolean requiresNoConsole() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresOp() {
+        return true;
     }
 }

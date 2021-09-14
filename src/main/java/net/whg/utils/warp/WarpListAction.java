@@ -2,9 +2,11 @@ package net.whg.utils.warp;
 
 import java.util.ArrayList;
 
+import org.bukkit.command.CommandSender;
+
+import net.whg.utils.WraithLib;
+import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.exceptions.CommandException;
-import net.whg.utils.player.CmdPlayer;
 
 public class WarpListAction extends Subcommand {
     private final WarpList warpList;
@@ -14,11 +16,11 @@ public class WarpListAction extends Subcommand {
     }
 
     @Override
-    public void execute(CmdPlayer sender, String[] args) throws CommandException {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         var sortedList = new ArrayList<String>();
         sortedList.addAll(warpList.listWarpPoints());
         sortedList.sort((a, b) -> a.compareToIgnoreCase(b));
-        sender.sendConfirmation("Warp Points: %s", (Object) sortedList.toArray());
+        WraithLib.log.sendMessage(sender, "Warp Points: %s", (Object) sortedList.toArray());
     }
 
     @Override

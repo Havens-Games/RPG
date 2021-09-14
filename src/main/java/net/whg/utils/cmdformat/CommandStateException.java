@@ -1,4 +1,4 @@
-package net.whg.utils.exceptions;
+package net.whg.utils.cmdformat;
 
 /**
  * Throw when the command sender tries to execute a command in an illegal state.
