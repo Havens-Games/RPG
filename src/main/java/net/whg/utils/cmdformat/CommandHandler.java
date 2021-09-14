@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,24 +18,14 @@ import net.whg.utils.WraithLib;
  */
 public abstract class CommandHandler implements CommandExecutor {
     protected final List<Subcommand> actions = new ArrayList<>();
+    private final Subcommand helpSubcommand;
 
     /**
-     * Sends a list of all available subcommands to the command sender as a
-     * formatted message.
-     * 
-     * @param sender - The command sender to send the message to.
+     * Creates a new CommandHandler and initializes the default help subcommand.
      */
-    private void listActions(CommandSender sender) {
-        var lines = new String[actions.size() + 1];
-        lines[0] = ChatColor.GRAY + "Available Actions:";
-
-        for (int i = 0; i < actions.size(); i++) {
-            var action = actions.get(i);
-            lines[i + 1] = String.format("%s/%s %s%s %s", ChatColor.DARK_AQUA, getName(), ChatColor.GRAY,
-                    action.getName(), action.getUsage());
-        }
-
-        sender.sendMessage(lines);
+    protected CommandHandler() {
+        helpSubcommand = new HelpSubcommand(actions);
+        actions.add(helpSubcommand);
     }
 
     /**
@@ -86,7 +75,7 @@ public abstract class CommandHandler implements CommandExecutor {
         }
 
         if (args.length < min || args.length > max) {
-            listActions(sender);
+            tryExecuteSubcommand(sender, helpSubcommand, new String[0]);
             return false;
         }
 
@@ -96,36 +85,49 @@ public abstract class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String cmdLabel,
             @NotNull String[] args) {
-        if (args.length == 0) {
-            listActions(sender);
-            return true;
-        }
+        if (args.length == 0)
+            return defaultFunction(sender);
 
         var actionName = args[0];
         args = Arrays.copyOfRange(args, 1, args.length);
 
         var action = getTargetAction(sender, actionName);
         if (action == null)
-            return true;
+            return false;
 
+        return tryExecuteSubcommand(sender, action, args);
+    }
+
+    /**
+     * Executes a given subcommand, catching exceptions, logging errors, and
+     * verifying command arguments and subcommand state as needed.
+     * 
+     * @param sender - The command sender.
+     * @param action - The subcommand being executed.
+     * @param args   - The command arguments.
+     * @return True if the command was executed successfully. False otherwise.
+     */
+    protected boolean tryExecuteSubcommand(CommandSender sender, Subcommand action, String[] args) {
         if (!verifyArgs(sender, action.getUsage(), args))
-            return true;
+            return false;
 
         try {
             checkSubcommandState(sender, action);
             action.execute(sender, args);
+            return true;
         } catch (InternalCommandException e) {
             e.printToPlayer(sender);
             e.printStackTrace();
+            return false;
         } catch (CommandException e) {
             e.printToPlayer(sender);
+            return false;
         } catch (Exception e) {
             var internal = new InternalCommandException(e);
             internal.printToPlayer(sender);
             internal.printStackTrace();
+            return false;
         }
-
-        return true;
     }
 
     /**
@@ -144,6 +146,17 @@ public abstract class CommandHandler implements CommandExecutor {
 
         if (subcommand.requiresNoConsole() && !(sender instanceof Player))
             throw new NoConsoleException();
+    }
+
+    /**
+     * The function that is executed if the command sender executes this command
+     * with no provided subcommand. By default, this will supply the help menu for
+     * this command set.
+     * 
+     * @param sender - The command sender.
+     */
+    protected boolean defaultFunction(CommandSender sender) {
+        return tryExecuteSubcommand(sender, helpSubcommand, new String[0]);
     }
 
     /**
