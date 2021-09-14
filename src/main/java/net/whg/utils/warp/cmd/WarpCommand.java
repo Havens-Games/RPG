@@ -1,6 +1,7 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import net.whg.utils.cmdformat.CommandHandler;
+import net.whg.utils.warp.WarpList;
 
 public class WarpCommand extends CommandHandler {
 

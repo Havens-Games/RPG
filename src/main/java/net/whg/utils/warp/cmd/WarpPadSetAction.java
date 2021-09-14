@@ -1,4 +1,4 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import java.io.IOException;
 
@@ -9,6 +9,10 @@ import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
+import net.whg.utils.events.location.SphereLocationTrigger;
+import net.whg.utils.warp.WarpList;
+import net.whg.utils.warp.WarpPad;
+import net.whg.utils.warp.WarpPoint;
 
 public class WarpPadSetAction extends Subcommand {
     private final WarpList warpList;
@@ -25,10 +29,16 @@ public class WarpPadSetAction extends Subcommand {
         var radius = getFloat(args[1]);
         var warpPoint = getWarpPoint(args[2]);
 
-        var warpPad = new WarpPad(name, location, radius, warpPoint.name());
+        var locationTrigger = new SphereLocationTrigger(name, location, radius, true);
+        var warpPad = new WarpPad(locationTrigger, warpPoint.name());
 
         try {
-            warpList.updateWarpPad(warpPad);
+            var oldWarpPad = warpList.getWarpPad(args[0]);
+            if (oldWarpPad != null) {
+                warpList.removeWarpPad(oldWarpPad);
+            }
+
+            warpList.addWarpPad(warpPad);
             WraithLib.log.sendMessage(sender, "Saved warp pad '%s' to '%s'.", name, warpPoint.name());
         } catch (IOException e) {
             WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");

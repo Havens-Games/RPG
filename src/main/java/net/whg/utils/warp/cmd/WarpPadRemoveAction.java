@@ -1,4 +1,4 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
+import net.whg.utils.warp.WarpList;
 
 public class WarpPadRemoveAction extends Subcommand {
     private final WarpList warpList;
@@ -23,7 +24,7 @@ public class WarpPadRemoveAction extends Subcommand {
             throw new UnknownArgumentException("Unknown warp pad: '%s'", args[0]);
 
         try {
-            warpList.removeWarpPad(warpPad.name());
+            warpList.removeWarpPad(warpPad);
             WraithLib.log.sendError(sender, "Removed warp pad '%s'.", warpPad.name());
         } catch (IOException e) {
             WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");

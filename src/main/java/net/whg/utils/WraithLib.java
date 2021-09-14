@@ -13,10 +13,12 @@ import net.whg.utils.events.location.CylinderLocationTrigger;
 import net.whg.utils.events.location.LocationTriggerListener;
 import net.whg.utils.events.location.SphereLocationTrigger;
 import net.whg.utils.logging.LoggingHandler;
-import net.whg.utils.warp.WarpCommand;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
-import net.whg.utils.warp.WarpPadCommand;
+import net.whg.utils.warp.WarpPad;
+import net.whg.utils.warp.WarpPoint;
+import net.whg.utils.warp.cmd.WarpCommand;
+import net.whg.utils.warp.cmd.WarpPadCommand;
 
 /**
  * The Wraithaven Utils plugin is a collection of small utility commands and
@@ -33,6 +35,8 @@ public class WraithLib extends JavaPlugin {
     static {
         ConfigurationSerialization.registerClass(SphereLocationTrigger.class, "SphereLocationTrigger");
         ConfigurationSerialization.registerClass(CylinderLocationTrigger.class, "CylinderLocationTrigger");
+        ConfigurationSerialization.registerClass(WarpPad.class, "WarpPad");
+        ConfigurationSerialization.registerClass(WarpPoint.class, "WarpPoint");
     }
 
     /**
@@ -53,7 +57,7 @@ public class WraithLib extends JavaPlugin {
         setLoggingHandler(new LoggingHandler(getLogger()));
 
         var locationTriggerListener = new LocationTriggerListener();
-        var warpList = new WarpList(this);
+        var warpList = new WarpList(locationTriggerListener);
 
         loadCommand("warp", new WarpCommand(warpList));
         loadCommand("warppad", new WarpPadCommand(warpList));

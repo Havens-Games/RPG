@@ -1,4 +1,4 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -7,6 +7,7 @@ import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
+import net.whg.utils.warp.WarpList;
 
 public class WarpToAction extends Subcommand {
     private final WarpList warpList;

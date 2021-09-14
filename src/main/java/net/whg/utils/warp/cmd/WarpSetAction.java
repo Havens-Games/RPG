@@ -1,4 +1,4 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import java.io.IOException;
 
@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
+import net.whg.utils.warp.WarpList;
+import net.whg.utils.warp.WarpPoint;
 
 public class WarpSetAction extends Subcommand {
     private final WarpList warpList;
@@ -22,7 +24,12 @@ public class WarpSetAction extends Subcommand {
         var warpPoint = new WarpPoint(args[0], player.getLocation());
 
         try {
-            warpList.updateWarpPoint(warpPoint);
+            var oldWarpPoint = warpList.getWarpPoint(args[0]);
+            if (oldWarpPoint != null) {
+                warpList.removeWarpPoint(oldWarpPoint);
+            }
+
+            warpList.addWarpPoint(warpPoint);
             WraithLib.log.sendMessage(sender, "Saved warp point '%s'.", warpPoint.name());
         } catch (IOException e) {
             WraithLib.log.sendError(sender, "Failed to save warp list! See console for more information.");

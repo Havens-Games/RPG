@@ -1,4 +1,4 @@
-package net.whg.utils.warp;
+package net.whg.utils.warp.cmd;
 
 import java.io.IOException;
 
@@ -8,6 +8,8 @@ import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
+import net.whg.utils.warp.WarpList;
+import net.whg.utils.warp.WarpPad;
 
 public class WarpRemoveAction extends Subcommand {
     private final WarpList warpList;
@@ -22,14 +24,9 @@ public class WarpRemoveAction extends Subcommand {
         if (warpPoint == null)
             throw new UnknownArgumentException("Unknown warp point: %s", args[0]);
 
-        var warpPads = warpList.getWarpPadsToPoint(warpPoint.name());
-        var warpPadNames = warpPads.stream().map(WarpPad::name).toArray();
-
         try {
-            warpList.removeWarpPoint(warpPoint.name());
-
-            for (var pad : warpPads)
-                warpList.removeWarpPad(pad.name());
+            var removedWarpPads = warpList.removeWarpPoint(warpPoint);
+            var warpPadNames = removedWarpPads.stream().map(WarpPad::name).toArray();
 
             WraithLib.log.sendMessage(sender, "Removed warp point '%s' and corresponding warp pads: %s.",
                     warpPoint.name(), warpPadNames);
