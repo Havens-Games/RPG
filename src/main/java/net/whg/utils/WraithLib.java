@@ -3,6 +3,7 @@ package net.whg.utils;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,6 +67,9 @@ public class WraithLib extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        WraithLib.log.logInfo("Unregistering all event listeners.");
+        HandlerList.unregisterAll(this);
+
         WraithLib.log.logInfo("Disabled WraithLib plugin.");
         setLoggingHandler(new LoggingHandler(Logger.getLogger(WraithLib.class.toString())));
     }
