@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
+import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpPoint;
@@ -32,8 +33,7 @@ public class WarpSetAction extends Subcommand {
             warpList.addWarpPoint(warpPoint);
             WraithLib.log.sendMessage(sender, "Saved warp point '%s'.", warpPoint.name());
         } catch (IOException e) {
-            WraithLib.log.sendError(sender, "Failed to save warp list! See console for more information.");
-            e.printStackTrace();
+            throw new InternalCommandException(e);
         }
     }
 

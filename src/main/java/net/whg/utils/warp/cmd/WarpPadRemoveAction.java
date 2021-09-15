@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
+import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.warp.WarpList;
@@ -21,14 +22,13 @@ public class WarpPadRemoveAction extends Subcommand {
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var warpPad = warpList.getWarpPad(args[0]);
         if (warpPad == null)
-            throw new UnknownArgumentException("Unknown warp pad: '%s'", args[0]);
+            throw new UnknownArgumentException("Unknown warp pad: %s", args[0]);
 
         try {
             warpList.removeWarpPad(warpPad);
-            WraithLib.log.sendError(sender, "Removed warp pad '%s'.", warpPad.name());
+            WraithLib.log.sendMessage(sender, "Removed warp pad %s.", warpPad.name());
         } catch (IOException e) {
-            WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");
-            e.printStackTrace();
+            throw new InternalCommandException(e);
         }
     }
 

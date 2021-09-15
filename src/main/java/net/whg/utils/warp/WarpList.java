@@ -21,9 +21,9 @@ public class WarpList {
 
     private final SafeArrayList<WarpPoint> warpPoints = new SafeArrayList<>();
     private final SafeArrayList<WarpPad> warpPads = new SafeArrayList<>();
+    private final LocationTriggerListener locationTriggers;
     private final YamlConfiguration config;
     private final File configFile;
-    private final LocationTriggerListener locationTriggers;
 
     /**
      * Creates a new WarpList object and loads all existing warp points and warp
@@ -39,6 +39,28 @@ public class WarpList {
         configFile = new File(plugin.getDataFolder(), "warps.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
         loadList();
+    }
+
+    /**
+     * Loads all warp pads and warp points from the config file.
+     */
+    private void loadList() {
+        var savedWarpPoints = config.getConfigurationSection("WarpPoints");
+        if (savedWarpPoints != null) {
+            for (var warpPointName : savedWarpPoints.getKeys(false)) {
+                var warpPoint = (WarpPoint) savedWarpPoints.get(warpPointName);
+                warpPoints.add(warpPoint);
+            }
+        }
+
+        var savedWarpPads = config.getConfigurationSection("WarpPads");
+        if (savedWarpPads != null) {
+            for (var warpPadName : savedWarpPads.getKeys(false)) {
+                var warpPad = (WarpPad) savedWarpPads.get(warpPadName);
+                locationTriggers.registerLocationTrigger(warpPad.locationTrigger());
+                warpPads.add(warpPad);
+            }
+        }
     }
 
     /**
@@ -68,7 +90,7 @@ public class WarpList {
      */
     public void addWarpPoint(WarpPoint warpPoint) throws IOException {
         if (getWarpPoint(warpPoint.name()) != null)
-            throw new IllegalArgumentException("There is already a warp point with that name.");
+            throw new IllegalArgumentException("There is already a warp point with that name!");
 
         warpPoints.add(warpPoint);
         config.set(WARP_POINTS_CONFIG_PREFIX + warpPoint.name(), warpPoint);
@@ -180,27 +202,5 @@ public class WarpList {
      */
     public List<WarpPad> getWarpPads() {
         return warpPads.asReadOnly();
-    }
-
-    /**
-     * Loads all warp pads and warp points from the config file.
-     */
-    private void loadList() {
-        var savedWarpPoints = config.getConfigurationSection("WarpPoints");
-        if (savedWarpPoints != null) {
-            for (var warpPointName : savedWarpPoints.getKeys(false)) {
-                var warpPoint = (WarpPoint) savedWarpPoints.get(warpPointName);
-                warpPoints.add(warpPoint);
-            }
-        }
-
-        var savedWarpPads = config.getConfigurationSection("WarpPads");
-        if (savedWarpPads != null) {
-            for (var warpPadName : savedWarpPads.getKeys(false)) {
-                var warpPad = (WarpPad) savedWarpPads.get(warpPadName);
-                locationTriggers.registerLocationTrigger(warpPad.locationTrigger());
-                warpPads.add(warpPad);
-            }
-        }
     }
 }

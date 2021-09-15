@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
+import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.warp.WarpList;
@@ -31,8 +32,7 @@ public class WarpRemoveAction extends Subcommand {
             WraithLib.log.sendMessage(sender, "Removed warp point '%s' and corresponding warp pads: %s.",
                     warpPoint.name(), warpPadNames);
         } catch (IOException e) {
-            WraithLib.log.sendError(sender, "Failed to save warp list! See console for more information.");
-            e.printStackTrace();
+            throw new InternalCommandException(e);
         }
     }
 

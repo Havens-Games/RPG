@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
+import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.events.location.CylinderLocationTrigger;
@@ -41,19 +42,15 @@ public class WarpPadSetAction extends Subcommand {
             locationTrigger = new CylinderLocationTrigger(name, location, radius, cylHeight, true);
         }
 
-        var warpPad = new WarpPad(locationTrigger, warpPoint.name());
-
         try {
             var oldWarpPad = warpList.getWarpPad(args[0]);
-            if (oldWarpPad != null) {
+            if (oldWarpPad != null)
                 warpList.removeWarpPad(oldWarpPad);
-            }
 
-            warpList.addWarpPad(warpPad);
+            warpList.addWarpPad(new WarpPad(locationTrigger, warpPoint.name()));
             WraithLib.log.sendMessage(sender, "Saved warp pad '%s' to '%s'.", name, warpPoint.name());
         } catch (IOException e) {
-            WraithLib.log.sendError(sender, "Failed to save warp pad list! See console for more information.");
-            e.printStackTrace();
+            throw new InternalCommandException(e);
         }
     }
 
