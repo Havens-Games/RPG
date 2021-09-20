@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * A logging wrapper that makes it easy to send messages to the console or a
@@ -108,6 +109,51 @@ public class LoggingHandler {
      */
     public void sendError(CommandSender sender, String message, Object... args) {
         message = MessageUtils.formatMessage(MessageUtils.ERROR_MESSAGE_STYLE, message, args);
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends a message to a command sender, applying the basic informational message
+     * formatting as well as inserting in PlaceholderAPI-driven placeholder texts
+     * for the given player.
+     * 
+     * @param player  - The player to send to the PlaceholderAPI plugin.
+     * @param sender  - The command sender to send the message to.
+     * @param message - The message to send.
+     * @param args    - The message format arguments.
+     */
+    public void sendPlaceholderMessage(CommandSender sender, Player player, String message, Object... args) {
+        message = MessageUtils.formatMessageWithPlaceholder(player, MessageUtils.INFO_MESSAGE_STYLE, message, args);
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends a warning message to a command sender, applying the warning message
+     * formatting as well as inserting in PlaceholderAPI-driven placeholder texts
+     * for the given player.
+     * 
+     * @param player  - The player to send to the PlaceholderAPI plugin.
+     * @param sender  - The command sender to send the message to.
+     * @param message - The message to send.
+     * @param args    - The message format arguments.
+     */
+    public void sendPlaceholderWarning(CommandSender sender, Player player, String message, Object... args) {
+        message = MessageUtils.formatMessageWithPlaceholder(player, MessageUtils.WARNING_MESSAGE_STYLE, message, args);
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends an error message to a command sender, applying the error message
+     * formatting as well as inserting in PlaceholderAPI-driven placeholder texts
+     * for the given player.
+     * 
+     * @param player  - The player to send to the PlaceholderAPI plugin.
+     * @param sender  - The command sender to send the message to.
+     * @param message - The message to send.
+     * @param args    - The message format arguments.
+     */
+    public void sendPlaceholderError(CommandSender sender, Player player, String message, Object... args) {
+        message = MessageUtils.formatMessageWithPlaceholder(player, MessageUtils.ERROR_MESSAGE_STYLE, message, args);
         sender.sendMessage(message);
     }
 }

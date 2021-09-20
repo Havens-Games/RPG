@@ -1,5 +1,9 @@
 package net.whg.utils.logging;
 
+import org.bukkit.entity.Player;
+
+import me.clip.placeholderapi.PlaceholderAPI;
+
 /**
  * A collection of utility methods dealing with sending messages to the console
  * or to players.
@@ -37,6 +41,28 @@ public final class MessageUtils {
 
         message = String.format(message, formatted);
         return style.getBaseColor() + message;
+    }
+
+    /**
+     * Applies the chat color formatting to the given message as well as inserting
+     * in PlaceholderAPI-driven placeholder texts for the given player. All
+     * placeholder texts will be colored with the argument color as defined by the
+     * provided message format style.
+     * 
+     * @param player  - The player to give to the PlaceholderAPI plugin.
+     * @param style   - The message formatting style.
+     * @param message - The message to modify.
+     * @param args    - The message argument variables.
+     * @return The formatted message.
+     */
+    public static String formatMessageWithPlaceholder(Player player, MessageFormatStyle style, String message,
+            Object... args) {
+        message = message.replaceAll("(\\%[a-z0-9_]+\\%(?=[^a-zA-Z0-9])|\\{[a-z0-9_]+\\})",
+                style.getArgumentColor() + "$1" + style.getBaseColor());
+
+        message = PlaceholderAPI.setPlaceholders(player, message);
+        message = formatMessage(style, message, args);
+        return message;
     }
 
     /**
