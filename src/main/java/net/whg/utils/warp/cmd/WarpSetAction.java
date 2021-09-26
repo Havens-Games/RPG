@@ -12,13 +12,24 @@ import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpPoint;
 
+/**
+ * Creates a new warp point.
+ */
 public class WarpSetAction extends Subcommand {
     private final WarpList warpList;
 
+    /**
+     * Creates a new WarpSetAction instance.
+     * 
+     * @param warpList - The warp list to add the warp point to.
+     */
     public WarpSetAction(WarpList warpList) {
         this.warpList = warpList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var player = (Player) sender;
@@ -37,23 +48,35 @@ public class WarpSetAction extends Subcommand {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUsage() {
         return "<name>";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "set";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean requiresNoConsole() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean requiresOp() {
-        return true;
+    public String requiredPermissionNode(String[] args) {
+        return "wraithlib.warp.set." + args[0];
     }
 }

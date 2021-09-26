@@ -17,13 +17,24 @@ import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpPad;
 import net.whg.utils.warp.WarpPoint;
 
+/**
+ * Creates a new warp pad.
+ */
 public class WarpPadSetAction extends Subcommand {
     private final WarpList warpList;
 
+    /**
+     * Creates a new WarpPadSetAction instance.
+     * 
+     * @param warpList - The warp list to add the warp pad to.
+     */
     public WarpPadSetAction(WarpList warpList) {
         this.warpList = warpList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var player = (Player) sender;
@@ -54,26 +65,45 @@ public class WarpPadSetAction extends Subcommand {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUsage() {
         return "<name> <radius> <warp point> [cylinderMode] [cylinderHeight]";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "set";
     }
 
-    @Override
-    public boolean requiresOp() {
-        return true;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean requiresNoConsole() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String requiredPermissionNode(String[] args) {
+        return "wraithlib.warppad.set." + args[0];
+    }
+
+    /**
+     * Tries to parse the provided command argument as a warp point.
+     * 
+     * @param arg - The command argument to parse.
+     * @return The warp point with the existing name.
+     * @throws CommandException If the warp point could not be found.
+     */
     protected WarpPoint getWarpPoint(String arg) throws CommandException {
         var warpPoint = warpList.getWarpPoint(arg);
         if (warpPoint == null)

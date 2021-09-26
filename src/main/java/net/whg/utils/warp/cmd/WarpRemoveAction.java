@@ -12,13 +12,24 @@ import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpPad;
 
+/**
+ * Removes an existing warp point.
+ */
 public class WarpRemoveAction extends Subcommand {
     private final WarpList warpList;
 
+    /**
+     * Creates a new WarpRemoveAction instance.
+     * 
+     * @param warpList - The warp list to remove the warp point from.
+     */
     public WarpRemoveAction(WarpList warpList) {
         this.warpList = warpList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var warpPoint = warpList.getWarpPoint(args[0]);
@@ -36,18 +47,27 @@ public class WarpRemoveAction extends Subcommand {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUsage() {
         return "<name>";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "remove";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean requiresOp() {
-        return true;
+    public String requiredPermissionNode(String[] args) {
+        return "wraithlib.warp.remove." + args[0];
     }
 }
