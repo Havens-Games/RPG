@@ -22,11 +22,17 @@ public class SpawnCommand extends CommandHandler {
         actions.add(spawnSubcommand);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "spawn";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean defaultFunction(CommandSender sender) {
         return tryExecuteSubcommand(sender, spawnSubcommand, new String[0]);

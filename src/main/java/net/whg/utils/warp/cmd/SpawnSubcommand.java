@@ -16,13 +16,27 @@ public class SpawnSubcommand extends Subcommand {
         Bukkit.dispatchCommand(sender, "warp to spawn");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUsage() {
         return "";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
+        return "spawn";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String requiredPermissionNode(String[] args) {
         return "spawn";
     }
 }
