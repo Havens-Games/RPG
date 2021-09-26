@@ -118,7 +118,7 @@ public abstract class Subcommand {
 
     /**
      * Whether or not this subcommand requires the command sender to be a server
-     * operator or not.
+     * operator or not. Defaults to false.
      * 
      * @return True if the command sender must be a server operator. False
      *         otherwise.
@@ -128,8 +128,20 @@ public abstract class Subcommand {
     }
 
     /**
+     * The permission node that is required to execute this subcommand. Defaults to
+     * null.
+     * 
+     * @param args - The arguments passed to this subcommand.
+     * @return The permission node, or null if this subcommand does not have an
+     *         attached permission node.
+     */
+    public String requiredPermissionNode(String[] args) {
+        return null;
+    }
+
+    /**
      * Whether or not this subcommand requires the command sender to be a player and
-     * not a console.
+     * not a console. Defaults to false.
      * 
      * @return True if the command sender must be a player. False if the command
      *         sender is allowed to be a console.

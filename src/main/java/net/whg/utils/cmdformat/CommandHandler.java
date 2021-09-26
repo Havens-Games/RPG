@@ -82,6 +82,9 @@ public abstract class CommandHandler implements CommandExecutor {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String cmdLabel,
             @NotNull String[] args) {
@@ -112,7 +115,7 @@ public abstract class CommandHandler implements CommandExecutor {
             return false;
 
         try {
-            checkSubcommandState(sender, action);
+            checkSubcommandState(sender, action, args);
             action.execute(sender, args);
             return true;
         } catch (InternalCommandException e) {
@@ -137,11 +140,17 @@ public abstract class CommandHandler implements CommandExecutor {
      * 
      * @param sender     - The command sender.
      * @param subcommand - The subcommand to check against.
+     * @param args       - The arguments passed to the subcommand.
      * @throws CommandException If the command sender fails to meet one of the
      *                          requirements provided by the subcommand.
      */
-    private void checkSubcommandState(CommandSender sender, Subcommand subcommand) throws CommandException {
+    private void checkSubcommandState(CommandSender sender, Subcommand subcommand, String[] args)
+            throws CommandException {
         if (subcommand.requiresOp() && !sender.isOp())
+            throw new NoPermissionsException();
+
+        var permissionNode = subcommand.requiredPermissionNode(args);
+        if (permissionNode != null && !sender.hasPermission(permissionNode))
             throw new NoPermissionsException();
 
         if (subcommand.requiresNoConsole() && !(sender instanceof Player))
