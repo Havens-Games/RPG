@@ -37,6 +37,6 @@ public class SpawnSubcommand extends Subcommand {
      */
     @Override
     public String requiredPermissionNode(String[] args) {
-        return "spawn";
+        return "wraithlib.spawn";
     }
 }
