@@ -34,7 +34,7 @@ public class SpawnPoints {
      * Loads all spawn points from the config file.
      */
     private void loadList() {
-        var savedSpawnPoints = config.getDefaultSection();
+        var savedSpawnPoints = config.getConfigurationSection("");
         if (savedSpawnPoints != null) {
             for (var worldName : savedSpawnPoints.getKeys(false)) {
                 var spawnPoint = (Location) savedSpawnPoints.get(worldName);
