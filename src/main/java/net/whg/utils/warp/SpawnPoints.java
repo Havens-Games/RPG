@@ -35,9 +35,11 @@ public class SpawnPoints {
      */
     private void loadList() {
         var savedSpawnPoints = config.getDefaultSection();
-        for (var worldName : savedSpawnPoints.getKeys(false)) {
-            var spawnPoint = (Location) savedSpawnPoints.get(worldName);
-            locations.put(worldName, spawnPoint);
+        if (savedSpawnPoints != null) {
+            for (var worldName : savedSpawnPoints.getKeys(false)) {
+                var spawnPoint = (Location) savedSpawnPoints.get(worldName);
+                locations.put(worldName, spawnPoint);
+            }
         }
     }
 
