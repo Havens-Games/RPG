@@ -18,6 +18,7 @@ import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
 import net.whg.utils.warp.WarpPad;
 import net.whg.utils.warp.WarpPoint;
+import net.whg.utils.warp.cmd.spawn.SetSpawnCommand;
 import net.whg.utils.warp.cmd.spawn.SpawnCommand;
 import net.whg.utils.warp.cmd.warp.WarpCommand;
 import net.whg.utils.warp.cmd.warppad.WarpPadCommand;
@@ -65,6 +66,7 @@ public class WraithLib extends JavaPlugin {
         loadCommand("warp", new WarpCommand(warpList));
         loadCommand("warppad", new WarpPadCommand(warpList));
         loadCommand("spawn", new SpawnCommand(spawnPoints));
+        loadCommand("setspawn", new SetSpawnCommand(spawnPoints));
 
         registerEvents(locationTriggerListener);
         registerEvents(new WarpListener(warpList));

@@ -10,3 +10,5 @@ commands:
     description: Creates and manages warp pads.
   spawn:
     description: Teleports the player to spawn.
+  setspawn:
+    description: Assigns the spawn location for the given world.

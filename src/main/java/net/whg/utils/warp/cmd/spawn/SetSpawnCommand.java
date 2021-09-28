@@ -5,20 +5,22 @@ import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.warp.SpawnPoints;
 
 /**
- * Teleports the command sender to the world's spawn location.
+ * A command that sets the world spawn location to the player's current
+ * position.
  */
-public class SpawnCommand extends CommandHandler {
-    private final SpawnSubcommand spawnSubcommand;
+public class SetSpawnCommand extends CommandHandler {
+    private final SetSpawnSubcommand spawnSubcommand;
 
     /**
      * {@inheritDoc}
      * 
-     * Registers the default spawn subcommand and overrides the default function.
+     * Registers the default set spawn subcommand and overrides the default
+     * function.
      * 
-     * @param spawnPoints - The handler for retrieving spawn locations.
+     * @param spawnPoints - The handler for assigning spawn locations.
      */
-    public SpawnCommand(SpawnPoints spawnPoints) {
-        spawnSubcommand = new SpawnSubcommand(spawnPoints);
+    public SetSpawnCommand(SpawnPoints spawnPoints) {
+        spawnSubcommand = new SetSpawnSubcommand(spawnPoints);
     }
 
     /**
@@ -26,7 +28,7 @@ public class SpawnCommand extends CommandHandler {
      */
     @Override
     public String getName() {
-        return "spawn";
+        return "setspawn";
     }
 
     /**

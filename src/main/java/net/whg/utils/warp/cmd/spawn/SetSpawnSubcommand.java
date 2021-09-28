@@ -1,26 +1,29 @@
 package net.whg.utils.warp.cmd.spawn;
 
+import java.io.IOException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
+import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.warp.SpawnPoints;
 
 /**
- * Teleports the command sender to the world's spawn location.
+ * A command that sets the world spawn location to the player's current
+ * position.
  */
-public class SpawnSubcommand extends Subcommand {
+public class SetSpawnSubcommand extends Subcommand {
     private final SpawnPoints spawnPoints;
 
     /**
-     * Creates a new SpawnSubcommand instance.
+     * Creates a new SetSpawnSubcommand instance.
      * 
-     * @param spawnPoints - The handler for retrieving spawn locations.
+     * @param spawnPoints - The handler for assigning spawn locations.
      */
-    public SpawnSubcommand(SpawnPoints spawnPoints) {
+    public SetSpawnSubcommand(SpawnPoints spawnPoints) {
         this.spawnPoints = spawnPoints;
     }
 
@@ -30,18 +33,14 @@ public class SpawnSubcommand extends Subcommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var player = (Player) sender;
+        var worldName = player.getWorld().getName();
+        var location = player.getLocation();
 
-        if (args.length == 0) {
-            var spawn = spawnPoints.getSpawnPoint(player.getWorld());
-            player.teleport(spawn);
-        } else {
-            var spawn = spawnPoints.getSpawnPoint(args[0]);
-
-            if (spawn == null)
-                throw new UnknownArgumentException("Could not find world %s!", args[0]);
-
-            player.teleport(spawn);
-            WraithLib.log.sendMessage(player, "Teleporting to spawn...");
+        try {
+            spawnPoints.setSpawnPoint(worldName, location);
+            WraithLib.log.sendMessage(player, "World %s spawn position updated.", worldName);
+        } catch (IOException e) {
+            throw new InternalCommandException(e);
         }
     }
 
@@ -50,7 +49,7 @@ public class SpawnSubcommand extends Subcommand {
      */
     @Override
     public String getUsage() {
-        return "[world]";
+        return "";
     }
 
     /**
@@ -58,7 +57,7 @@ public class SpawnSubcommand extends Subcommand {
      */
     @Override
     public String getName() {
-        return "spawn";
+        return "setspawn";
     }
 
     /**
@@ -74,9 +73,6 @@ public class SpawnSubcommand extends Subcommand {
      */
     @Override
     public String requiredPermissionNode(String[] args) {
-        if (args.length == 0)
-            return "wraithlib.spawn";
-        else
-            return "wraithlib.spawn." + args[0];
+        return "wraithlib.setspawn";
     }
 }
