@@ -13,6 +13,7 @@ import net.whg.utils.events.location.CylinderLocationTrigger;
 import net.whg.utils.events.location.LocationTriggerListener;
 import net.whg.utils.events.location.SphereLocationTrigger;
 import net.whg.utils.logging.LoggingHandler;
+import net.whg.utils.warp.SpawnPoints;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
 import net.whg.utils.warp.WarpPad;
@@ -59,10 +60,11 @@ public class WraithLib extends JavaPlugin {
 
         var locationTriggerListener = new LocationTriggerListener();
         var warpList = new WarpList(locationTriggerListener);
+        var spawnPoints = new SpawnPoints();
 
         loadCommand("warp", new WarpCommand(warpList));
         loadCommand("warppad", new WarpPadCommand(warpList));
-        loadCommand("spawn", new SpawnCommand());
+        loadCommand("spawn", new SpawnCommand(spawnPoints));
 
         registerEvents(locationTriggerListener);
         registerEvents(new WarpListener(warpList));

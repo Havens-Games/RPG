@@ -88,15 +88,18 @@ public abstract class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String cmdLabel,
             @NotNull String[] args) {
-        if (args.length == 0)
-            return defaultFunction(sender);
 
-        var actionName = args[0];
-        args = Arrays.copyOfRange(args, 1, args.length);
+        Subcommand action;
+        if (args.length == 0) {
+            action = defaultSubcommand();
+        } else {
+            var actionName = args[0];
+            args = Arrays.copyOfRange(args, 1, args.length);
 
-        var action = getTargetAction(sender, actionName);
-        if (action == null)
-            return false;
+            action = getTargetAction(sender, actionName);
+            if (action == null)
+                return false;
+        }
 
         return tryExecuteSubcommand(sender, action, args);
     }
@@ -158,14 +161,25 @@ public abstract class CommandHandler implements CommandExecutor {
     }
 
     /**
-     * The function that is executed if the command sender executes this command
-     * with no provided subcommand. By default, this will supply the help menu for
-     * this command set.
+     * Gets the default subcommand to be executed if the user does not provide any
+     * additional arguments to this command. This subcommand is also used as the
+     * only subcommand if this command is marked as a root command. The default
+     * return value is the help subcommand.
      * 
-     * @param sender - The command sender.
+     * @return The default subcommand.
      */
-    protected boolean defaultFunction(CommandSender sender) {
-        return tryExecuteSubcommand(sender, helpSubcommand, new String[0]);
+    protected Subcommand defaultSubcommand() {
+        return helpSubcommand;
+    }
+
+    /**
+     * Gets whether or not this command is a root command. If this command is a root
+     * command, all arguments passed to this command are passed to the default
+     * subcommand. If this command is not a root command, the first argument is
+     * always assumed to be the subcommand instead of using the default.
+     */
+    protected boolean isRootCommand() {
+        return false;
     }
 
     /**

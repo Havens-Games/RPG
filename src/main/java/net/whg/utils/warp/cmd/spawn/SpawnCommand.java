@@ -1,8 +1,8 @@
 package net.whg.utils.warp.cmd.spawn;
 
-import org.bukkit.command.CommandSender;
-
 import net.whg.utils.cmdformat.CommandHandler;
+import net.whg.utils.cmdformat.Subcommand;
+import net.whg.utils.warp.SpawnPoints;
 
 /**
  * A simple command that teleports the player to the warp point labeled "spawn".
@@ -14,12 +14,11 @@ public class SpawnCommand extends CommandHandler {
      * {@inheritDoc}
      * 
      * Registers the default spawn subcommand and overrides the default function.
+     * 
+     * @param spawnPoints - The handler for retrieving spawn locations.
      */
-    public SpawnCommand() {
-        super();
-
-        spawnSubcommand = new SpawnSubcommand();
-        actions.add(spawnSubcommand);
+    public SpawnCommand(SpawnPoints spawnPoints) {
+        spawnSubcommand = new SpawnSubcommand(spawnPoints);
     }
 
     /**
@@ -34,7 +33,15 @@ public class SpawnCommand extends CommandHandler {
      * {@inheritDoc}
      */
     @Override
-    protected boolean defaultFunction(CommandSender sender) {
-        return tryExecuteSubcommand(sender, spawnSubcommand, new String[0]);
+    protected Subcommand defaultSubcommand() {
+        return spawnSubcommand;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isRootCommand() {
+        return true;
     }
 }
