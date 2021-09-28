@@ -1,4 +1,4 @@
-package net.whg.utils.warp.cmd;
+package net.whg.utils.warp.cmd.warppad;
 
 import java.io.IOException;
 

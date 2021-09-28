@@ -1,25 +1,26 @@
-package net.whg.utils.warp.cmd;
+package net.whg.utils.warp.cmd.warppad;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.Subcommand;
 import net.whg.utils.warp.WarpList;
-import net.whg.utils.warp.WarpPoint;
+import net.whg.utils.warp.WarpPad;
 
 /**
- * Displays a list of all existing warp locations to the command sender.
+ * Lists all existing warp pads to the command sender.
  */
-public class WarpListAction extends Subcommand {
+public class WarpPadListAction extends Subcommand {
     private final WarpList warpList;
 
     /**
-     * Creates a new WarpListAction instance.
+     * Creates a new WarpPadListAction instance.
      * 
-     * @param warpList - The warp list to read available warps from.
+     * @param warpList - The warp list to read existing warp pads from.
      */
-    public WarpListAction(WarpList warpList) {
+    public WarpPadListAction(WarpList warpList) {
         this.warpList = warpList;
     }
 
@@ -28,9 +29,15 @@ public class WarpListAction extends Subcommand {
      */
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        var sortedList = warpList.getWarpPoints().stream().map(WarpPoint::name).toList();
+        var sortedList = warpList.getWarpPads().stream().map(WarpPad::name).toList();
         sortedList.sort((a, b) -> a.compareToIgnoreCase(b));
-        WraithLib.log.sendMessage(sender, "Warp Points: %s", (Object) sortedList.toArray());
+
+        var list = sortedList.stream().map(point -> {
+            var target = warpList.getWarpPad(point).warpPoint();
+            return point + ChatColor.GRAY + " -> " + ChatColor.DARK_AQUA + target;
+        }).toArray();
+
+        WraithLib.log.sendMessage(sender, "Warp Pads: %s", (Object) list);
     }
 
     /**
@@ -54,6 +61,6 @@ public class WarpListAction extends Subcommand {
      */
     @Override
     public String requiredPermissionNode(String[] args) {
-        return "wraithlib.warp.list";
+        return "wraithlib.warppad.list";
     }
 }

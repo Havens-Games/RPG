@@ -1,4 +1,4 @@
-package net.whg.utils.warp.cmd;
+package net.whg.utils.warp.cmd.spawn;
 
 import org.bukkit.command.CommandSender;
 

@@ -17,9 +17,9 @@ import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
 import net.whg.utils.warp.WarpPad;
 import net.whg.utils.warp.WarpPoint;
-import net.whg.utils.warp.cmd.SpawnCommand;
-import net.whg.utils.warp.cmd.WarpCommand;
-import net.whg.utils.warp.cmd.WarpPadCommand;
+import net.whg.utils.warp.cmd.spawn.SpawnCommand;
+import net.whg.utils.warp.cmd.warp.WarpCommand;
+import net.whg.utils.warp.cmd.warppad.WarpPadCommand;
 
 /**
  * The Wraithaven Utils plugin is a collection of small utility commands and

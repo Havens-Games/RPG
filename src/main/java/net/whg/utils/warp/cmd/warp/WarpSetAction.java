@@ -1,28 +1,29 @@
-package net.whg.utils.warp.cmd;
+package net.whg.utils.warp.cmd.warp;
 
 import java.io.IOException;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import net.whg.utils.WraithLib;
 import net.whg.utils.cmdformat.CommandException;
 import net.whg.utils.cmdformat.InternalCommandException;
 import net.whg.utils.cmdformat.Subcommand;
-import net.whg.utils.cmdformat.UnknownArgumentException;
 import net.whg.utils.warp.WarpList;
+import net.whg.utils.warp.WarpPoint;
 
 /**
- * Deletes a warp pad.
+ * Creates a new warp point.
  */
-public class WarpPadRemoveAction extends Subcommand {
+public class WarpSetAction extends Subcommand {
     private final WarpList warpList;
 
     /**
-     * Creates a new WarpPadRemoveAction instance.
+     * Creates a new WarpSetAction instance.
      * 
-     * @param warpList - The warp list to delete warp pads from.
+     * @param warpList - The warp list to add the warp point to.
      */
-    public WarpPadRemoveAction(WarpList warpList) {
+    public WarpSetAction(WarpList warpList) {
         this.warpList = warpList;
     }
 
@@ -31,13 +32,17 @@ public class WarpPadRemoveAction extends Subcommand {
      */
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        var warpPad = warpList.getWarpPad(args[0]);
-        if (warpPad == null)
-            throw new UnknownArgumentException("Unknown warp pad: %s", args[0]);
+        var player = (Player) sender;
+        var warpPoint = new WarpPoint(args[0], player.getLocation());
 
         try {
-            warpList.removeWarpPad(warpPad);
-            WraithLib.log.sendMessage(sender, "Removed warp pad %s.", warpPad.name());
+            var oldWarpPoint = warpList.getWarpPoint(args[0]);
+            if (oldWarpPoint != null) {
+                warpList.removeWarpPoint(oldWarpPoint);
+            }
+
+            warpList.addWarpPoint(warpPoint);
+            WraithLib.log.sendMessage(sender, "Saved warp point '%s'.", warpPoint.name());
         } catch (IOException e) {
             throw new InternalCommandException(e);
         }
@@ -56,7 +61,15 @@ public class WarpPadRemoveAction extends Subcommand {
      */
     @Override
     public String getName() {
-        return "remove";
+        return "set";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean requiresNoConsole() {
+        return true;
     }
 
     /**
@@ -64,6 +77,6 @@ public class WarpPadRemoveAction extends Subcommand {
      */
     @Override
     public String requiredPermissionNode(String[] args) {
-        return "wraithlib.warppad.remove." + args[0];
+        return "wraithlib.warp.set." + args[0];
     }
 }
