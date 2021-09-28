@@ -90,7 +90,7 @@ public abstract class CommandHandler implements CommandExecutor {
             @NotNull String[] args) {
 
         Subcommand action;
-        if (args.length == 0) {
+        if (args.length == 0 || isRootCommand()) {
             action = defaultSubcommand();
         } else {
             var actionName = args[0];
