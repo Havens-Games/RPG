@@ -61,9 +61,9 @@ public record CylinderLocationTrigger(String name, Location center, float radius
         if (location.getWorld() != center.getWorld())
             return false;
 
-        var deltaX = center.getX() - location.getX();
-        var deltaY = center.getY() - location.getY();
-        var deltaZ = center.getZ() - location.getZ();
+        var deltaX = location.getX() - center.getX();
+        var deltaY = location.getY() - center.getY();
+        var deltaZ = location.getZ() - center.getZ();
         var dist = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
         return dist < radius && deltaY >= 0 && deltaY < height;
