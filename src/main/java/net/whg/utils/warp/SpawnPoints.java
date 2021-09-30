@@ -32,8 +32,8 @@ public class SpawnPoints {
     }
 
     private final Map<String, Location> locations = new HashMap<>();
-    private final YamlConfiguration config;
-    private final File configFile;
+    private YamlConfiguration config;
+    private File configFile;
 
     /**
      * Creates a new SpawnPoints instance and loads all existing spawn points from
@@ -41,9 +41,6 @@ public class SpawnPoints {
      */
     public SpawnPoints() {
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
-        configFile = new File(plugin.getDataFolder(), "spawns.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-
         Bukkit.getPluginManager().registerEvents(new LoadSpawnPoints(), plugin);
     }
 
@@ -51,6 +48,10 @@ public class SpawnPoints {
      * Loads all spawn points from the config file.
      */
     private void loadList() {
+        var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
+        configFile = new File(plugin.getDataFolder(), "spawns.yml");
+        config = YamlConfiguration.loadConfiguration(configFile);
+
         var savedSpawnPoints = config.getConfigurationSection("");
         if (savedSpawnPoints != null) {
             for (var worldName : savedSpawnPoints.getKeys(false)) {

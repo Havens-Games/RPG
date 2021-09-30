@@ -38,8 +38,8 @@ public class WarpList {
     private final SafeArrayList<WarpPoint> warpPoints = new SafeArrayList<>();
     private final SafeArrayList<WarpPad> warpPads = new SafeArrayList<>();
     private final LocationTriggerListener locationTriggers;
-    private final YamlConfiguration config;
-    private final File configFile;
+    private YamlConfiguration config;
+    private File configFile;
 
     /**
      * Creates a new WarpList object and loads all existing warp points and warp
@@ -52,9 +52,6 @@ public class WarpList {
         this.locationTriggers = locationTriggers;
 
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
-        configFile = new File(plugin.getDataFolder(), "warps.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-
         Bukkit.getPluginManager().registerEvents(new LoadWarpList(), plugin);
     }
 
@@ -62,6 +59,10 @@ public class WarpList {
      * Loads all warp pads and warp points from the config file.
      */
     private void loadList() {
+        var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
+        configFile = new File(plugin.getDataFolder(), "warps.yml");
+        config = YamlConfiguration.loadConfiguration(configFile);
+
         var savedWarpPoints = config.getConfigurationSection("WarpPoints");
         if (savedWarpPoints != null) {
             for (var warpPointName : savedWarpPoints.getKeys(false)) {
