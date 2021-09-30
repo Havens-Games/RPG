@@ -1,5 +1,6 @@
 package net.whg.utils.warp.cmd.spawn;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,18 +32,17 @@ public class SpawnSubcommand extends Subcommand {
     public void execute(CommandSender sender, String[] args) throws CommandException {
         var player = (Player) sender;
 
+        Location spawn;
         if (args.length == 0) {
-            var spawn = spawnPoints.getSpawnPoint(player.getWorld());
-            player.teleport(spawn);
+            spawn = spawnPoints.getGlobalSpawn();
         } else {
-            var spawn = spawnPoints.getSpawnPoint(args[0]);
-
+            spawn = spawnPoints.getSpawnPoint(args[0]);
             if (spawn == null)
                 throw new UnknownArgumentException("Could not find world %s!", args[0]);
-
-            player.teleport(spawn);
-            WraithLib.log.sendMessage(player, "Teleporting to spawn...");
         }
+
+        player.teleport(spawn);
+        WraithLib.log.sendMessage(player, "Teleporting to spawn...");
     }
 
     /**
@@ -73,9 +73,9 @@ public class SpawnSubcommand extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         if (args.length == 0)
-            return "wraithlib.spawn";
+            return "wraithlib.spawn.global";
         else
             return "wraithlib.spawn." + args[0];
     }

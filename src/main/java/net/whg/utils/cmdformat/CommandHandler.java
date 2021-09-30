@@ -149,15 +149,15 @@ public abstract class CommandHandler implements CommandExecutor {
      */
     private void checkSubcommandState(CommandSender sender, Subcommand subcommand, String[] args)
             throws CommandException {
+        if (subcommand.requiresNoConsole() && !(sender instanceof Player))
+            throw new NoConsoleException();
+
         if (subcommand.requiresOp() && !sender.isOp())
             throw new NoPermissionsException();
 
-        var permissionNode = subcommand.requiredPermissionNode(args);
+        var permissionNode = subcommand.requiredPermissionNode(sender, args);
         if (permissionNode != null && !sender.hasPermission(permissionNode))
             throw new NoPermissionsException();
-
-        if (subcommand.requiresNoConsole() && !(sender instanceof Player))
-            throw new NoConsoleException();
     }
 
     /**

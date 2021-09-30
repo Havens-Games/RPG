@@ -33,6 +33,32 @@ public class WarpList {
             loadList();
             HandlerList.unregisterAll(this);
         }
+
+        /**
+         * Loads all warp pads and warp points from the config file.
+         */
+        private void loadList() {
+            var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
+            configFile = new File(plugin.getDataFolder(), "warps.yml");
+            config = YamlConfiguration.loadConfiguration(configFile);
+
+            var savedWarpPoints = config.getConfigurationSection("WarpPoints");
+            if (savedWarpPoints != null) {
+                for (var warpPointName : savedWarpPoints.getKeys(false)) {
+                    var warpPoint = (WarpPoint) savedWarpPoints.get(warpPointName);
+                    warpPoints.add(warpPoint);
+                }
+            }
+
+            var savedWarpPads = config.getConfigurationSection("WarpPads");
+            if (savedWarpPads != null) {
+                for (var warpPadName : savedWarpPads.getKeys(false)) {
+                    var warpPad = (WarpPad) savedWarpPads.get(warpPadName);
+                    locationTriggers.registerLocationTrigger(warpPad.locationTrigger());
+                    warpPads.add(warpPad);
+                }
+            }
+        }
     }
 
     private final SafeArrayList<WarpPoint> warpPoints = new SafeArrayList<>();
@@ -53,32 +79,6 @@ public class WarpList {
 
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
         Bukkit.getPluginManager().registerEvents(new LoadWarpList(), plugin);
-    }
-
-    /**
-     * Loads all warp pads and warp points from the config file.
-     */
-    private void loadList() {
-        var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
-        configFile = new File(plugin.getDataFolder(), "warps.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-
-        var savedWarpPoints = config.getConfigurationSection("WarpPoints");
-        if (savedWarpPoints != null) {
-            for (var warpPointName : savedWarpPoints.getKeys(false)) {
-                var warpPoint = (WarpPoint) savedWarpPoints.get(warpPointName);
-                warpPoints.add(warpPoint);
-            }
-        }
-
-        var savedWarpPads = config.getConfigurationSection("WarpPads");
-        if (savedWarpPads != null) {
-            for (var warpPadName : savedWarpPads.getKeys(false)) {
-                var warpPad = (WarpPad) savedWarpPads.get(warpPadName);
-                locationTriggers.registerLocationTrigger(warpPad.locationTrigger());
-                warpPads.add(warpPad);
-            }
-        }
     }
 
     /**

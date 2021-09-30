@@ -60,7 +60,7 @@ public class WarpPadListAction extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         return "wraithlib.warppad.list";
     }
 }

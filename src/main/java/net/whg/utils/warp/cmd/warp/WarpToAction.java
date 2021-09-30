@@ -67,7 +67,7 @@ public class WarpToAction extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         return "wraithlib.warp.to." + args[0];
     }
 }

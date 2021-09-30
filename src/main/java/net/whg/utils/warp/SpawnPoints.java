@@ -29,9 +29,29 @@ public class SpawnPoints {
             loadList();
             HandlerList.unregisterAll(this);
         }
+
+        /**
+         * Loads all spawn points from the config file.
+         */
+        private void loadList() {
+            var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
+            configFile = new File(plugin.getDataFolder(), "spawns.yml");
+            config = YamlConfiguration.loadConfiguration(configFile);
+
+            var savedSpawnPoints = config.getConfigurationSection("");
+            if (savedSpawnPoints != null) {
+                for (var worldName : savedSpawnPoints.getKeys(false)) {
+                    var spawnPoint = (Location) savedSpawnPoints.get(worldName);
+                    locations.put(worldName, spawnPoint);
+                }
+            }
+
+            globalSpawn = config.getLocation("Global_Spawn");
+        }
     }
 
     private final Map<String, Location> locations = new HashMap<>();
+    private Location globalSpawn;
     private YamlConfiguration config;
     private File configFile;
 
@@ -42,23 +62,6 @@ public class SpawnPoints {
     public SpawnPoints() {
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
         Bukkit.getPluginManager().registerEvents(new LoadSpawnPoints(), plugin);
-    }
-
-    /**
-     * Loads all spawn points from the config file.
-     */
-    private void loadList() {
-        var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
-        configFile = new File(plugin.getDataFolder(), "spawns.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-
-        var savedSpawnPoints = config.getConfigurationSection("");
-        if (savedSpawnPoints != null) {
-            for (var worldName : savedSpawnPoints.getKeys(false)) {
-                var spawnPoint = (Location) savedSpawnPoints.get(worldName);
-                locations.put(worldName, spawnPoint);
-            }
-        }
     }
 
     /**
@@ -105,6 +108,30 @@ public class SpawnPoints {
         locations.put(worldName, location);
 
         config.set(worldName, location);
+        config.save(configFile);
+    }
+
+    /**
+     * Gets the global spawn location that is assigned to this server. This is a
+     * spawn location that ideally represents the "hub" point of the server. This is
+     * usually where players will spawn when joining the server for the first time.
+     * 
+     * @return The global spawn location.
+     */
+    public Location getGlobalSpawn() {
+        return globalSpawn;
+    }
+
+    /**
+     * Sets the global spawn location and saves it to the config.
+     * 
+     * @param location - The new global spawn location.
+     * @see #getGlobalSpawn()
+     */
+    public void setGlobalSpawn(Location location) throws IOException {
+        globalSpawn = location;
+
+        config.set("Global_Spawn", location);
         config.save(configFile);
     }
 }

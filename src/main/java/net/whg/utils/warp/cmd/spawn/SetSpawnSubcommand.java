@@ -35,10 +35,19 @@ public class SetSpawnSubcommand extends Subcommand {
         var player = (Player) sender;
         var worldName = player.getWorld().getName();
         var location = player.getLocation();
+        var global = false;
+
+        if (args.length == 1)
+            global = Boolean.parseBoolean(args[0]);
 
         try {
-            spawnPoints.setSpawnPoint(worldName, location);
-            WraithLib.log.sendMessage(player, "World %s spawn position updated.", worldName);
+            if (global) {
+                spawnPoints.setGlobalSpawn(location);
+                WraithLib.log.sendMessage(player, "Server spawn position updated.");
+            } else {
+                spawnPoints.setSpawnPoint(worldName, location);
+                WraithLib.log.sendMessage(player, "World %s spawn position updated.", worldName);
+            }
         } catch (IOException e) {
             throw new InternalCommandException(e);
         }
@@ -49,7 +58,7 @@ public class SetSpawnSubcommand extends Subcommand {
      */
     @Override
     public String getUsage() {
-        return "";
+        return "[global T/F]";
     }
 
     /**
@@ -72,7 +81,12 @@ public class SetSpawnSubcommand extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
-        return "wraithlib.setspawn";
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
+        if (args.length == 0 && args[0].equalsIgnoreCase("true")) {
+            var player = (Player) sender;
+            return "wraithlib.setspawn." + player.getWorld().getName();
+        } else {
+            return "wraithlib.setspawn.global";
+        }
     }
 }

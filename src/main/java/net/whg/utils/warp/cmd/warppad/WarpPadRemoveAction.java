@@ -63,7 +63,7 @@ public class WarpPadRemoveAction extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         return "wraithlib.warppad.remove." + args[0];
     }
 }

@@ -131,11 +131,12 @@ public abstract class Subcommand {
      * The permission node that is required to execute this subcommand. Defaults to
      * null.
      * 
-     * @param args - The arguments passed to this subcommand.
+     * @param sender - The command sender.
+     * @param args   - The arguments passed to this subcommand.
      * @return The permission node, or null if this subcommand does not have an
      *         attached permission node.
      */
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         return null;
     }
 

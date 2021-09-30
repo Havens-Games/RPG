@@ -76,7 +76,7 @@ public class WarpSetAction extends Subcommand {
      * {@inheritDoc}
      */
     @Override
-    public String requiredPermissionNode(String[] args) {
+    public String requiredPermissionNode(CommandSender sender, String[] args) {
         return "wraithlib.warp.set." + args[0];
     }
 }
