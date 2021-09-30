@@ -11,14 +11,18 @@ import org.bukkit.command.CommandSender;
  */
 public class HelpSubcommand extends Subcommand {
     private final List<Subcommand> actions;
+    private final String commandNamespace;
 
     /**
      * Creates a new HelpSubcommand.
      * 
-     * @param actions - A list of all available subcommands.
+     * @param actions          - A list of all available subcommands.
+     * @param commandNamespace - The command namespace to write in the description
+     *                         text.
      */
-    public HelpSubcommand(List<Subcommand> actions) {
+    public HelpSubcommand(List<Subcommand> actions, String commandNamespace) {
         this.actions = actions;
+        this.commandNamespace = commandNamespace;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class HelpSubcommand extends Subcommand {
 
         for (int i = 0; i < actions.size(); i++) {
             var action = actions.get(i);
-            lines[i + 1] = String.format("%s/%s %s%s %s", ChatColor.DARK_AQUA, getName(), ChatColor.GRAY,
+            lines[i + 1] = String.format("%s/%s %s%s %s", ChatColor.DARK_AQUA, commandNamespace, ChatColor.GRAY,
                     action.getName(), action.getUsage());
         }
 

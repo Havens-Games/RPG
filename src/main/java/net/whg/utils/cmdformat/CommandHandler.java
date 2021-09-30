@@ -24,7 +24,7 @@ public abstract class CommandHandler implements CommandExecutor {
      * Creates a new CommandHandler and initializes the default help subcommand.
      */
     protected CommandHandler() {
-        helpSubcommand = new HelpSubcommand(actions);
+        helpSubcommand = new HelpSubcommand(actions, getName());
         actions.add(helpSubcommand);
     }
 
