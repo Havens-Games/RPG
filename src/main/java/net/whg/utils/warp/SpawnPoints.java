@@ -9,12 +9,28 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 
 /**
  * Contains a list of spawn locations for each existing world that is
  * synchronized with a corresponding config file.
  */
 public class SpawnPoints {
+    /**
+     * A very small event listener that triggers the spawn point list to load once
+     * the server has finished starting, then unregisters itself.
+     */
+    private class LoadSpawnPoints implements Listener {
+        @EventHandler
+        public void onServerLoad(ServerLoadEvent e) {
+            loadList();
+            HandlerList.unregisterAll(this);
+        }
+    }
+
     private final Map<String, Location> locations = new HashMap<>();
     private final YamlConfiguration config;
     private final File configFile;
@@ -27,7 +43,8 @@ public class SpawnPoints {
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
         configFile = new File(plugin.getDataFolder(), "spawns.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        loadList();
+
+        Bukkit.getPluginManager().registerEvents(new LoadSpawnPoints(), plugin);
     }
 
     /**

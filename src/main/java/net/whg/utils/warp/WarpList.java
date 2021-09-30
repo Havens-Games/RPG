@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 
 import net.whg.utils.SafeArrayList;
 import net.whg.utils.events.location.LocationTriggerListener;
@@ -18,6 +22,18 @@ import net.whg.utils.events.location.LocationTriggerListener;
 public class WarpList {
     private static final String WARP_POINTS_CONFIG_PREFIX = "WarpPoints.";
     private static final String WARP_PADS_CONFIG_PREFIX = "WarpPads.";
+
+    /**
+     * A very small event listener that triggers the warp list to load once the
+     * server has finished starting, then unregisters itself.
+     */
+    private class LoadWarpList implements Listener {
+        @EventHandler
+        public void onServerLoad(ServerLoadEvent e) {
+            loadList();
+            HandlerList.unregisterAll(this);
+        }
+    }
 
     private final SafeArrayList<WarpPoint> warpPoints = new SafeArrayList<>();
     private final SafeArrayList<WarpPad> warpPads = new SafeArrayList<>();
@@ -38,7 +54,8 @@ public class WarpList {
         var plugin = Bukkit.getPluginManager().getPlugin("WraithLib");
         configFile = new File(plugin.getDataFolder(), "warps.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        loadList();
+
+        Bukkit.getPluginManager().registerEvents(new LoadWarpList(), plugin);
     }
 
     /**
