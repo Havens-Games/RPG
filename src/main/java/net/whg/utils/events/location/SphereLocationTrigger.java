@@ -26,7 +26,7 @@ public record SphereLocationTrigger(String name, Location center, float radius, 
         var x = (double) args.get("x");
         var y = (double) args.get("y");
         var z = (double) args.get("z");
-        var r = (float) args.get("r");
+        var r = (float) (double) args.get("r");
         var triggerOnTeleport = (boolean) args.get("triggerOnTeleport");
 
         var center = new Location(world, x, y, z);
