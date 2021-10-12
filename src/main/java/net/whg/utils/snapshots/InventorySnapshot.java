@@ -1,4 +1,4 @@
-package net.whg.utils.inventory;
+package net.whg.utils.snapshots;
 
 import java.util.ArrayList;
 import java.util.Arrays;

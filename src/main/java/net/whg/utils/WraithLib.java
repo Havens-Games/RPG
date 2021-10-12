@@ -13,6 +13,8 @@ import net.whg.utils.events.location.CylinderLocationTrigger;
 import net.whg.utils.events.location.LocationTriggerListener;
 import net.whg.utils.events.location.SphereLocationTrigger;
 import net.whg.utils.logging.LoggingHandler;
+import net.whg.utils.snapshots.Snapshot;
+import net.whg.utils.snapshots.types.Inventory;
 import net.whg.utils.warp.SpawnPoints;
 import net.whg.utils.warp.WarpList;
 import net.whg.utils.warp.WarpListener;
@@ -38,8 +40,12 @@ public class WraithLib extends JavaPlugin {
     static {
         ConfigurationSerialization.registerClass(SphereLocationTrigger.class, "SphereLocationTrigger");
         ConfigurationSerialization.registerClass(CylinderLocationTrigger.class, "CylinderLocationTrigger");
+
         ConfigurationSerialization.registerClass(WarpPad.class, "WarpPad");
         ConfigurationSerialization.registerClass(WarpPoint.class, "WarpPoint");
+
+        ConfigurationSerialization.registerClass(Snapshot.class, "Snapshot");
+        ConfigurationSerialization.registerClass(Inventory.class, "Snapshot_Inventory");
     }
 
     /**
